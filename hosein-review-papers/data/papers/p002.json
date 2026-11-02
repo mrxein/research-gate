@@ -1,0 +1,109 @@
+{
+  "id": "p002",
+  "title": "Federated learning in intrusion detection: advancements, applications, and future directions",
+  "authors": ["Busra Buyuktanir", "Şahsene Altinkaya", "Gozde Karatas Baydogmus", "Kazim Yildiz"],
+  "year": 2025,
+  "venue": "Cluster Computing, Vol. 28, Article 473",
+  "doi": "10.1007/s10586-025-05325-w",
+  "researchArea": "Cyber Security, Federated Learning (FL), Intrusion Detection Systems (IDS), Machine Learning & Deep Learning, Literature Review & Meta-Taxonomy",
+  "tags": ["federated learning", "intrusion detection", "survey", "non-IID", "privacy", "IoT"],
+  "problem": "Cyber threat complexity and network expansion challenge traditional security mechanisms. Centralized ML/DL intrusion detection models require aggregating sensitive user data on central servers, causing severe privacy concerns, potential data breaches, and non-compliance with data protection laws like GDPR and KVKK. In FL-based IDS deployments, key challenges include non-IID data distributions, untrusted participants, and communication/computation bottlenecks across resource-constrained edge devices.",
+  "motivation": "Data protection laws (GDPR, KVKK) mandate strict personal data privacy, making centralized data collection impractical. FL enables collaborative model training across decentralized clients without centralizing raw data, making it highly relevant for Internet of Things (IoT), healthcare, finance, vehicular edge networks, and industrial control systems.",
+  "noveltyAndContributions": [
+    "Systematic literature review and comparative analysis of multiple FL algorithms (FedAvg, FedOpt, FedProx, FedAdam, FedAdagrad, FedYogi) across diverse IDS scenarios, rather than focusing on a single algorithm",
+    "Multi-dataset review covering established and modern cybersecurity datasets (Edge-IIoTset, CICIDS2017, NSL-KDD, KDD99, UNSW-NB15, CSE-CIC-IDS2018, CIC-DDoS2019, CIC-MalMem-2022)",
+    "Critical identification of open challenges (non-IID data management, untrusted participant risks, communication overhead, scalability) with structured future research avenues"
+  ],
+  "methodology": [
+    "Paper Type: Comprehensive literature review and survey paper",
+    "FL Architectural Taxonomies: Centralized vs. Decentralized FL; Cross-Silo vs. Cross-Device FL; Horizontal FL (HFL), Vertical FL (VFL), and Federated Transfer Learning (FTL)",
+    "Reviewed Aggregation Algorithms: FedAvg, FedOpt, FedProx, FedAdam, FedAdagrad, FedYogi, FedSBS, FedAGRU, FEDGAN-IDS, DAFL, and others",
+    "Reviewed Classifiers: CNN, DNN, ANN, BiLSTM, GRU, SRU, Autoencoders, XGBoost, CatBoost, Random Forest, SVM"
+  ],
+  "keyAssumptions": [
+    "As a literature review, the study assumes that the experimental setups and performance metrics reported in the cited papers are accurate",
+    "Assumes standard FL libraries (TensorFlow Federated, PySyft, FATE, PaddleFL, FedML) are representative platforms for real-world distributed implementations"
+  ],
+  "datasets": [
+    "Review of benchmark IDS datasets: Kyoto (2006), NSL-KDD (2009), UNSW-NB15 (2015), CIC-IDS2017, CIDDS-001 (2017), CSE-CIC-IDS2018, CIC-DDoS2019, CIC-MalMem-2022, Edge-IIoTset, ToN_IoT, IoT-ID-20, 5G-NIDD, WUSTL-IIoT-2021"
+  ],
+  "partition": [
+    "IID: Reviewed as the favorable setting where client data is evenly distributed and FL matches centralized accuracy",
+    "Non-IID: Highlighted as a major challenge in FL-IDS that causes accuracy degradation unless addressed via adaptive methods (e.g., Transfer Learning, FedProx, FedOpt)"
+  ],
+  "experimentalSetup": [
+    "Survey paper with no new experiments; summarizes software platforms used across the FL literature: TensorFlow Federated (TFF), PySyft, FATE, PaddleFL, and FedML"
+  ],
+  "baselines": [
+    "Compares FL-IDS approaches against traditional centralized ML/DL models (CNN, DNN, RF, AdaBoost) and unaggregated on-device local training"
+  ],
+  "flAlgorithms": ["FedAvg", "FedOpt", "FedProx", "FedAdam", "FedAdagrad", "FedYogi", "FedSBS", "FedAGRU", "FEDGAN-IDS", "DAFL"],
+  "xaiMethods": [],
+  "xaiEvaluation": "N/A (not a primary focus; noted only briefly in specific cited healthcare/IoT studies and not systematically evaluated)",
+  "metrics": [
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "F1-Score",
+    "Loss",
+    "False Positive Rate (FPR)",
+    "Convergence Rate",
+    "AUC Score",
+    "Communication Cost / Overhead"
+  ],
+  "results": "FL-IDS models in the surveyed literature reach detection accuracy from 92% up to 99.97%, matching centralized models while keeping data local. Hybrid models (e.g., CNN-LSTM, GAN-FL, FedSRUs) and multi-view ensemble learning improve threat detection in domain-specific settings such as IoT and smart grids. Privacy-preserving techniques (Differential Privacy, Secure Multi-Party Computation, Homomorphic Encryption) protect model updates during transmission.",
+  "failureConditions": [
+    "Severe non-IID data skew across edge devices leads to model divergence and accuracy drops under standard FedAvg",
+    "High communication latency and bandwidth overhead create bottlenecks in resource-constrained edge networks",
+    "Model poisoning or Byzantine attacks by compromised participants degrade global model reliability"
+  ],
+  "costEvaluation": "Not evaluated directly. The survey reviews communication optimization methods such as Dynamic Weighted Aggregation (DAFL), Knowledge Distillation (KD), and lightweight SRU models that reduce transmission frequency and edge compute load.",
+  "limitations": [
+    {
+      "text": "Lack of standardized non-IID data partition metrics for FL-IDS benchmarks. (Authors)",
+      "theme": "No standard non-IID metrics"
+    },
+    {
+      "text": "Heavy reliance in the literature on outdated datasets (e.g., KDD99, NSL-KDD) that do not reflect modern IoT/IoMT attack vectors. (Authors)",
+      "theme": "Outdated datasets"
+    },
+    {
+      "text": "Ongoing security risks during model weight parameter exchanges. (Authors)",
+      "theme": "Model update security"
+    },
+    {
+      "text": "Relies on published literature without running new empirical benchmark experiments.",
+      "theme": "Secondary data synthesis"
+    },
+    {
+      "text": "Does not perform a quantitative meta-analysis (e.g., statistical meta-regression) because surveyed experimental setups are heterogeneous.",
+      "theme": "No quantitative meta-analysis"
+    },
+    {
+      "text": "Provides minimal coverage of explainability frameworks (e.g., SHAP, LIME) for FL-IDS predictions.",
+      "theme": "No XAI"
+    }
+  ],
+  "futureWork": [
+    "Design non-IID metrics and realistic benchmark datasets for edge/IoT environments",
+    "Construct adversarial robustness datasets to test resilience against model poisoning and Byzantine attacks",
+    "Develop lightweight FL architectures and communication-efficient aggregation algorithms for resource-constrained devices",
+    "Combine privacy mechanisms (Differential Privacy, Homomorphic Encryption) with Knowledge Distillation"
+  ],
+  "relevance": "Comprehensive, up-to-date (2025) baseline survey for thesis background, literature review sections, dataset taxonomy, and open-challenge framing.",
+  "newIdeas": [
+    "XAI-enabled non-IID FL-IDS: integrate SHAP/LIME with non-IID robust aggregation (FedProx/FedOpt) to give edge-level threat explanations while preserving detection accuracy under class skew",
+    "Byzantine-resilient and privacy-preserving FL: unify Differential Privacy with Byzantine defense (Trimmed Mean / Krum), evaluated on modern datasets such as Edge-IIoTset and CIC-DDoS2019"
+  ],
+  "reviewStatus": "Reviewed & Extracted",
+  "priority": "High",
+  "evidence": [
+    { "item": "Title, authors, journal, DOI", "page": "473:1–2", "section": "1" },
+    { "item": "Introduction & contributions", "page": "473:1–2", "section": "1" },
+    { "item": "Overview of malware, attacks & IDS", "page": "473:3–5", "section": "2", "ref": "Tables 1–2, Figs 2–3" },
+    { "item": "FL architecture & partitioning (HFL, VFL, FTL)", "page": "473:5–10", "section": "3", "ref": "Figs 4–9" },
+    { "item": "Datasets review", "page": "473:10–13", "section": "4", "ref": "Table 3" },
+    { "item": "FL-based IDS survey & comparative analysis", "page": "473:14–19", "section": "5", "ref": "Table 4" },
+    { "item": "Discussion & future directions", "page": "473:16–17, 20", "section": "6, 7" }
+  ]
+}

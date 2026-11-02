@@ -1,0 +1,120 @@
+{
+  "id": "p003",
+  "title": "A Federated Learning-Based Approach for Improving Intrusion Detection in Industrial Internet of Things Networks",
+  "authors": [
+    "Md Mamunur Rashid",
+    "Shahriar Usman Khan",
+    "Fariha Eusufzai",
+    "Md. Azharuddin Redwan",
+    "Saifur Rahman Sabuj",
+    "Mahmoud Elsharief"
+  ],
+  "year": 2023,
+  "venue": "Network (MDPI), Vol. 3, Issue 1, pp. 158–179",
+  "doi": "10.3390/network3010008",
+  "researchArea": "Industrial IoT (IIoT) Security, Federated Learning (FL), Intrusion Detection Systems (IDS), Deep Learning (CNN & RNN/LSTM)",
+  "tags": ["federated learning", "intrusion detection", "IIoT", "Edge-IIoTset", "CNN", "RNN", "non-IID"],
+  "problem": "Rapid growth in connected IIoT devices generates massive volumes of user data, making conventional centralized machine learning (ML) models impractical due to privacy concerns, excessive wireless bandwidth consumption, latency, and Single Point of Failure (SPOF) risks. Furthermore, resource-constrained IIoT edge devices lack the memory and computational capacity to run heavy security software locally.",
+  "motivation": "Protecting sensitive IIoT networks (e.g., smart manufacturing, healthcare, smart cities) without centralizing raw network traffic to cloud servers. Deploying FL allows edge devices (such as local Wi-Fi routers) to retain private data locally while sharing only updated model weight parameters with a central aggregator, saving wireless bandwidth and reducing transmission delay.",
+  "noveltyAndContributions": [
+    "Developed an FL-based IIoT Intrusion Detection System combining local deep learning classifiers (CNN and RNN) with central parameter aggregation via FedAvg",
+    "Conducted thorough evaluations on the Edge-IIoTset benchmark dataset across 14 attack classes and benign traffic",
+    "Evaluated scalability and client performance under both IID and non-IID data distributions with varying client counts (K = 3, 9, 15)",
+    "Achieved FL intrusion detection accuracy (92.49%) close to conventional centralized ML models (93.92%) while maintaining data privacy"
+  ],
+  "methodology": [
+    "Base Classifiers: Convolutional Neural Network (CNN with 2–3 Conv1D layers) and Recurrent Neural Network (RNN/LSTM with 2 hidden LSTM layers)",
+    "Data Preprocessing: Removal of missing values and duplicates, flow feature filtering, Z-score normalization, categorical dummy encoding, Recursive Feature Elimination (RFE) for feature selection, and SMOTE for class balancing",
+    "FL Aggregation & Training Protocol: Centralized FL architecture executing FedAvg over 50 global communication rounds with 20 local epochs per client"
+  ],
+  "keyAssumptions": [
+    "The central FL aggregation server is trustworthy",
+    "IIoT devices are not malicious or compromised prior to deployment (\"No Malicious IIoT Device by Design\")",
+    "Participating clients (e.g., local gateways/routers) are secure and operate reliably during model training"
+  ],
+  "datasets": [
+    "Edge-IIoTset: 14 real-world cyberattack types plus normal benign traffic",
+    "Attack types: DDoS_UDP, DDoS_ICMP, DDoS_HTTP, DDoS_TCP, Ransomware, SQL_injection, Uploading, Backdoor, Vulnerability_scanner, Port_Scanning, XSS, Password, MITM, Fingerprinting"
+  ],
+  "partition": [
+    "IID: Dataset classes are evenly and identically distributed across all participant clients",
+    "Non-IID: Data distribution across clients is inconsistent and skewed (e.g., some clients hold only a small subset of attack classes)"
+  ],
+  "numClients": [3, 9, 15],
+  "experimentalSetup": [
+    "Software: Google Colaboratory, Python 3, NumPy, Pandas, TensorFlow, Keras, Scikit-learn",
+    "Hyperparameters: Batch size = 100, Local epochs = 20, Global rounds = 50, Learning rate = 0.01–0.5, Regularization = L2, Loss = categorical_crossentropy, Activation = ReLU, Output = SoftMax"
+  ],
+  "baselines": [
+    "Centralized ML models: Centralized CNN and Centralized RNN trained on the aggregated dataset",
+    "State-of-the-art FL-IDS models from prior literature (Nguyen et al. 2019, Zhao et al. 2020, Li et al. 2021, Huong et al. 2021)"
+  ],
+  "flAlgorithms": ["FedAvg"],
+  "xaiMethods": [],
+  "xaiEvaluation": "N/A (no explainability method implemented or evaluated)",
+  "metrics": [
+    "Accuracy (%)",
+    "Precision",
+    "Recall",
+    "F1-Score",
+    "True Positive Rate (TPR / Detection Rate)",
+    "False Positive Rate (FPR / False Alarm Rate)",
+    "ROC Curves & AUC (0.91–0.95)",
+    "Training Time (minutes)"
+  ],
+  "results": "Centralized baseline accuracy was 93.92% (Normal class), about 94% overall for both CNN and RNN. FL accuracy at the 50th round, IID: RNN 92.37% / 92.28% / 92.02% and CNN 91.27% / 91.13% / 90.56% for K=3/9/15. Non-IID: RNN 91.87% / 91.53% / 91.07% and CNN 90.58% / 90.73% / 90.18% for K=3/9/15. CNN trains significantly faster than RNN across all client configurations.",
+  "failureConditions": [
+    "Under non-IID data, accuracy disparities between the best and worst clients are severe in early rounds (worst client at round 1 drops to 16.74%–24.64%) due to label skew",
+    "Performance degrades if participating clients disconnect mid-operation or have slow upload links"
+  ],
+  "costEvaluation": "Theoretical total time complexity is defined as O(total) = O(K·(E·n_k·Σ l_{x-1}·l_x)) + O(K·W) + O(W). Execution time was evaluated empirically across K = 3, 9, 15 for both CNN and RNN. Exact network transmission bytes per round were not reported.",
+  "limitations": [
+    {
+      "text": "Assumes client devices and aggregation servers are honest; no mechanism to prevent model poisoning attacks from malicious edge nodes. (Authors)",
+      "theme": "No adversarial defense"
+    },
+    {
+      "text": "Does not account for resource constraints (battery level, CPU cycle limits, processing speed) when selecting participating clients. (Authors)",
+      "theme": "No resource-aware client selection"
+    },
+    {
+      "text": "Global model accuracy can be negatively impacted by client dropouts during training rounds. (Authors)",
+      "theme": "Client dropout sensitivity"
+    },
+    {
+      "text": "The dataset was manually split into synthetic subsets for FL clients because native FL splits for Edge-IIoTset were unavailable.",
+      "theme": "Synthetic data partitioning"
+    },
+    {
+      "text": "No Explainable AI framework to interpret feature contributions for detected threat types.",
+      "theme": "No XAI"
+    },
+    {
+      "text": "Does not report exact network transmission bytes per round across gRPC channels.",
+      "theme": "No communication overhead analysis"
+    }
+  ],
+  "futureWork": [
+    "Develop outlier detection filtering mechanisms to defend against gradual model poisoning attacks",
+    "Design resource-aware FL client selection protocols considering battery backup power, memory, and processing capacity",
+    "Mitigate the impact of client dropouts and slow model update transmissions on global model convergence"
+  ],
+  "relevance": "Highly relevant benchmark for Edge-FL intrusion detection in IIoT networks, giving comparative baseline metrics on the Edge-IIoTset dataset under IID vs. non-IID distributions using CNN/RNN architectures.",
+  "newIdeas": [
+    "Poisoning-resilient Edge-FL: combine Byzantine-robust aggregation (Krum, Trimmed Mean) with outlier filtering to defend the Edge-IIoTset FL framework against compromised IIoT nodes",
+    "XAI-enhanced IIoT intrusion detection: integrate SHAP or LIME with local CNN/RNN models to give analysts interpretable feature attributions for detected attack vectors",
+    "Resource-aware dynamic client selection: an energy- and compute-aware selection algorithm to prevent stragglers and client dropouts during FL rounds"
+  ],
+  "reviewStatus": "Reviewed & Extracted",
+  "priority": "High",
+  "evidence": [
+    { "item": "Title, authors, journal, DOI", "page": "158–159", "section": "1" },
+    { "item": "System architecture & FL steps", "page": "164–167", "section": "3.1, 3.3", "ref": "Figs 2–3" },
+    { "item": "Time complexity formula", "page": "167–168", "section": "3.4", "ref": "Eq. (2)" },
+    { "item": "Edge-IIoTset dataset & preprocessing", "page": "169–170", "section": "4.2", "ref": "Table 2" },
+    { "item": "Hyperparameters", "page": "172", "ref": "Table 3" },
+    { "item": "Centralized vs. FL results", "page": "171–173", "ref": "Tables 4–5, Fig. 4" },
+    { "item": "ROC curves & training runtime", "page": "173–175", "ref": "Figs 5–6, Table 6" },
+    { "item": "Limitations & future directions", "page": "175–176", "section": "5" }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "id": "p001",
+  "title": "Edge-Federated Learning-Based Intelligent Intrusion Detection System for Heterogeneous Internet of Things",
+  "authors": ["Shalaka S. Mahadik", "Pranav M. Pawar", "Raja Muthalagu"],
+  "year": 2024,
+  "venue": "IEEE Access, Vol. 12, pp. 81740–81754",
+  "doi": "10.1109/ACCESS.2024.3410046",
+  "researchArea": "Cyber Security, Heterogeneous IoT (HetIoT), Edge Computing, Federated Learning, Deep Learning for Intrusion Detection Systems",
+  "tags": ["federated learning", "intrusion detection", "DDoS", "IoT", "edge computing", "non-IID"],
+  "problem": "Heterogeneous IoT (HetIoT) applications generate huge volumes of network traffic and are highly susceptible to Distributed Denial of Service (DDoS) attacks. Traditional centralized deep learning intrusion detection models raise data privacy concerns, incur high latency, and consume excessive bandwidth. Furthermore, Federated Learning (FL) models suffer severe accuracy degradation when trained on non-Independent and Identically Distributed (non-IID) data distributions across heterogeneous clients.",
+  "motivation": "HetIoT technology adoption is expanding rapidly toward 6G and is projected to surpass $700 billion by 2030. DDoS attack vectors (such as DNS, TCP, NTP, UDP) pose severe risks to real-time applications like self-driving cars, smart agriculture, and smart healthcare. Deploying FL and Edge Computing brings processing closer to network devices, enforcing GDPR/HIPAA-compliant data privacy while lowering latency and bandwidth requirements.",
+  "noveltyAndContributions": [
+    "Proposed an Edge-FL-based Intelligent Intrusion Detection System combining Edge Computing (EC), Federated Learning (FL), and a 1D Convolutional Neural Network (1D-CNN) classifier",
+    "Evaluated performance on both 8-class (unbalanced) and 12-class (balanced) DDoS attack scenarios under both IID and non-IID data distributions",
+    "Analyzed client scalability across different participant client counts (K = 3, 5, 7)",
+    "Outperformed centralized IDS and state-of-the-art FL intrusion detection models with lower structural network complexity"
+  ],
+  "methodology": [
+    "Base Classifier: 1D Convolutional Neural Network (1D-CNN)",
+    "Architecture / Parameters: Learning rate = 0.01, Optimizer = ADAM, Activation = ReLU, Output Classification Function = SoftMax, Batch Size = 128, Loss Function = Sparse Categorical Cross-Entropy",
+    "FL Aggregation & Training Protocol: Centralized FL structure using the Federated Averaging (FedAvg) algorithm. The execution includes 20 global communication rounds (testing rounds), with each round consisting of 10 validation rounds to select the best-performing validation model"
+  ],
+  "keyAssumptions": [
+    "All participant clients (K) are reliable, cooperative, and participate fully in training",
+    "Clients are selected randomly or based on availability",
+    "Data partitioning follows Horizontal FL (clients share identical feature spaces but possess different data sample rows)",
+    "Global model architecture is homogeneous across all participant edge nodes (all run the same 1D-CNN base model)",
+    "The central entity / aggregator server is trusted to perform FedAvg without compromising network parameter integrity"
+  ],
+  "datasets": [
+    "CICDDoS2019 benchmarking security dataset from the Canadian Institute for Cybersecurity (CIC) & UNB",
+    "Dataset-8: 8-class classification (7 DDoS attack types + 1 benign class); unbalanced; processed using stratified sampling",
+    "Dataset-12: 12-class classification (11 DDoS attack types + 1 benign class); balanced; processed using random sampling"
+  ],
+  "partition": [
+    "IID: Traffic samples of all attack classes and benign traffic are evenly distributed across all participant clients",
+    "Non-IID: Traffic classes are non-uniformly distributed among clients (e.g., each client holds a random, non-overlapping subset of attack classes alongside benign data)"
+  ],
+  "numClients": [3, 5, 7],
+  "experimentalSetup": [
+    "Software: Spyder 5.0.1 IDE, Python 3.7.16, Scikit-learn, Matplotlib 3.5, TensorFlow 2.3, TensorFlow Federated 0.18",
+    "Hardware: Intel Core i7-10750H CPU @ 2.60GHz, 16GB RAM, Windows 10 64-bit OS, NVIDIA GeForce GTX 1650Ti GPU (4GB VRAM)",
+    "Settings: Centralized baseline trained for 20 epochs; Edge-FL trained for 20 global communication rounds, 10 validation rounds, and 1 local epoch"
+  ],
+  "baselines": [
+    "Centralized IDS using the identical 1D-CNN classifier trained on pooled data",
+    "State-of-the-art FL IDS models (2020–2023): MLP, GBDT with data binning, Deep Autoencoders, GRU, Self-Attention + CNN, Residual CNN, CNN-MLP"
+  ],
+  "flAlgorithms": ["FedAvg", "Horizontal FL"],
+  "xaiMethods": [],
+  "xaiEvaluation": "N/A (no explainability method proposed, implemented, or evaluated)",
+  "metrics": [
+    "Accuracy (%)",
+    "Loss (Sparse Categorical Cross-Entropy)",
+    "Confusion Matrix (per-class breakdown)",
+    "Validation Accuracy/Loss curves across communication rounds"
+  ],
+  "results": "Centralized IDS reached 99.97% accuracy for both 8-class and 12-class. Edge-FL 8-class: IID 99.98% / 99.97% / 99.96% and non-IID 99.97% / 99.94% / 99.90% for K=3/5/7. Edge-FL 12-class: IID 99.96% / 99.96% / 99.95% and non-IID 99.07% / 96.44% / 52.39% for K=3/5/7.",
+  "failureConditions": [
+    "12-class non-IID with K=7 clients: accuracy drops to 52.39% and loss stays very high (~5.5 to 8) due to extreme class heterogeneity across 7 edge nodes",
+    "8-class non-IID with K=7: benign traffic is occasionally misclassified as UDPLag attack traffic"
+  ],
+  "costEvaluation": "Evaluated qualitatively only (fewer layers and neurons than Residual-CNN or CNN-MLP baselines, processing near the edge). Communication overhead (MB transferred) and computation (FLOPs) were not explicitly reported.",
+  "limitations": [
+    {
+      "text": "Unsatisfactory accuracy in complex non-IID setups with higher client counts (K=7). (Authors)",
+      "theme": "Non-IID performance degradation"
+    },
+    {
+      "text": "Limited number of communication rounds evaluated; non-IID performance could improve with more rounds and hyperparameter tuning. (Authors)",
+      "theme": "Limited training rounds"
+    },
+    {
+      "text": "Assumes all edge clients are always available, non-faulty, and reliable, which ignores real-world HetIoT device churn and disconnections.",
+      "theme": "Idealized client behavior"
+    },
+    {
+      "text": "Does not quantify network transmission bytes or bandwidth consumption between edge nodes and the server per round.",
+      "theme": "No communication overhead analysis"
+    },
+    {
+      "text": "Does not evaluate robustness against malicious clients (model or data poisoning attacks).",
+      "theme": "No adversarial defense"
+    },
+    {
+      "text": "Evaluated on up to K=7 clients only, whereas practical IoT deployments involve hundreds or thousands of nodes.",
+      "theme": "Limited client scale"
+    },
+    {
+      "text": "Uses a black-box 1D-CNN with no Explainable AI features to clarify intrusion decisions for security operators.",
+      "theme": "No XAI"
+    }
+  ],
+  "futureWork": [
+    "Fine-tuning hyperparameters and increasing global communication rounds to improve non-IID performance",
+    "Expanding to a hierarchical Edge-FL-based IDS combining centralized and distributed on-site learning"
+  ],
+  "relevance": "Highly relevant for work on Edge AI, Federated Learning under non-IID data, or IoT security. Serves as an up-to-date (2024) benchmark for DDoS detection using FedAvg on CICDDoS2019.",
+  "newIdeas": [
+    "Integrate personalized FL algorithms (FedProx, pFedMe, Ditto) to prevent the accuracy drop (99% to 52.39%) in 12-class non-IID with K >= 7",
+    "Combine Explainable AI (SHAP / LIME) with the 1D-CNN to give interpretable feature contributions for detected attack traffic at the edge",
+    "Add Byzantine-robust aggregation (Krum, Trimmed Mean) to defend against model poisoning from compromised edge nodes"
+  ],
+  "reviewStatus": "Reviewed & Extracted",
+  "priority": "High",
+  "evidence": [
+    { "item": "Title, authors, journal", "page": "81740", "section": "I" },
+    { "item": "Problem definition & motivation", "page": "81741", "section": "I-B" },
+    { "item": "Related work comparison", "page": "81742", "ref": "Table 2" },
+    { "item": "Dataset & preprocessing", "page": "81743–81744", "section": "III-A/B", "ref": "Fig. 5, Table 4" },
+    { "item": "Proposed architecture & algorithm", "page": "81744–81745", "ref": "Figs. 6–8, Algorithm 2" },
+    { "item": "Experimental setup & hyperparameters", "page": "81746", "ref": "Tables 5–6" },
+    { "item": "Results & degradation analysis", "page": "81746–81753", "section": "IV", "ref": "Tables 7–9, Figs. 10–20" },
+    { "item": "Limitations & future work", "page": "81753", "section": "IV-C, V" }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "id": "p004",
+  "title": "Lightweight Federated Learning for Efficient Network Intrusion Detection",
+  "authors": [
+    "Abdelhak Bouayad",
+    "Hamza Alami",
+    "Meryem Janati Idrissi",
+    "Ismail Berrada"
+  ],
+  "year": 2024,
+  "venue": "IEEE Access, Vol. 12, pp. 132415–132431",
+  "doi": "10.1109/ACCESS.2024.3494057",
+  "researchArea": "Cyber Security, Network Intrusion Detection System (NIDS), Federated Learning (FL), Deep Learning (CNNs), Structured Model Pruning, Resource-Constrained Edge Security",
+  "tags": ["federated learning", "intrusion detection", "NIDS", "model pruning", "lightweight", "CNN", "edge computing"],
+  "problem": "Traditional Deep Learning-based Network Intrusion Detection Systems (NIDS) face high computational and storage costs, high latency, energy-intensive training, and data privacy risks when raw network traffic is centralized. Standard FL mitigates data privacy concerns, but training large deep learning architectures (e.g., CNNs) across distributed, resource-constrained edge devices creates computational bottlenecks and high communication overhead.",
+  "motivation": "Protecting modern interconnected network infrastructure against malicious cyberattacks (such as zero-day threats and DDoS) without centralized raw traffic collection. Integrating zero-shot structured pruning with FL reduces model size, memory usage, FLOPs, and communication overhead while preserving data privacy (GDPR/privacy-compliant) and high detection accuracy on edge devices.",
+  "noveltyAndContributions": [
+    "Proposed Lightweight-Fed-NIDS, combining Federated Learning (FL) with a data-free (zero-shot) structured pruning technique (DepGraph dependency graph criteria)",
+    "Computed a one-time pruning mask at the global server without accessing client data, broadcasting it once during initialization",
+    "Used deep CNN feature extractors (ResNet-50, ResNet-101, VGG-19) on 3-channel image representations of raw network flows (300 bytes × 40 packets)",
+    "Evaluated client scalability up to 100 participant clients across three benchmark NIDS datasets (UNSW-NB15, USTC-TFC2016, CIC-IDS-2017)",
+    "Achieved up to 3.6X training acceleration, 2.85X inference acceleration, and 90% model size reduction with ~99% accuracy"
+  ],
+  "methodology": [
+    "Base Classifiers / Feature Extractors: 2D CNNs (ResNet-50, ResNet-101, VGG-19) with a fully connected SoftMax classifier",
+    "Traffic Representation: Raw packets converted into 3-channel flow images using NFStream (300 bytes per packet × 40 packets per flow)",
+    "Pruning Method: Zero-shot structured pruning using DepGraph (L1-norm group importance scoring based on inter-layer and intra-layer dependencies) to generate a binary pruning mask tensor",
+    "FL Aggregation & Protocol: Centralized FL using FedAvg (benchmarked against FedProx) over 5 global communication rounds, 10 local client epochs, learning rate = 2 × 10⁻⁴"
+  ],
+  "keyAssumptions": [
+    "The global server is trusted to compute the mask and aggregate updates without altering model integrity",
+    "Clients share an identical feature space (Horizontal FL)",
+    "The zero-shot pruning mask computed at initialization on the server accurately reflects general parameter importance without requiring client data",
+    "Secure communication channels exist between the server and clients"
+  ],
+  "datasets": [
+    "CIC-IDS-2017: 14 attack classes + benign; 80 features extracted from PCAP",
+    "UNSW-NB15: 9 attack classes + benign; 49 features / PCAP",
+    "USTC-TFC2016: 10 malware traffic types + 10 normal traffic types"
+  ],
+  "partition": [
+    "IID: Normal and attack samples are evenly and proportionally split among all participant NIDS clients (the only scheme evaluated)"
+  ],
+  "numClients": [10, 50, 100],
+  "experimentalSetup": [
+    "Hardware: African Super-Computing Center (UM6P) HPC node with 4 × NVIDIA A100 SXM4 80GB GPUs",
+    "Software: Python 3.9.15, PyTorch, Torch-Pruning (DepGraph), NFStream, NumPy, Pandas",
+    "Settings: 70% train / 30% test split; 5 global communication rounds; 10 local epochs; learning rate = 2 × 10⁻⁴; sparsity levels = 0%, 50%, 70%, 90%; 50% of clients randomly selected per round for aggregation"
+  ],
+  "baselines": [
+    "Unpruned centralized NIDS baseline models",
+    "Unpruned federated learning baseline models (0% sparsity)",
+    "State-of-the-art FL-IDS models: MT-DNN-FL (Zhao et al. 2019), AFL (Agrawal et al. 2021), FedACNN (Man et al. 2021)",
+    "FedProx aggregation benchmarked against FedAvg"
+  ],
+  "flAlgorithms": ["FedAvg", "FedProx"],
+  "xaiMethods": [],
+  "xaiEvaluation": "N/A (no explainability method implemented or evaluated)",
+  "metrics": [
+    "Accuracy (%)",
+    "F1-Score",
+    "Training Acceleration (TA)",
+    "Inference Acceleration (IA)",
+    "Delta Accuracy (ΔAcc)",
+    "Delta F1-Score (ΔF1-sc)"
+  ],
+  "results": "Accuracy stays around 99% across datasets and client counts even at high pruning rates (e.g., ResNet-50 at 70% sparsity reaches 99.94% on CIC-IDS-2017). Up to 3.62X training acceleration and 2.85X inference acceleration (VGG-19 at 90% sparsity on CIC-IDS-2017 with 50 users), and up to 90% model size reduction. FedAvg matched or surpassed FedProx in accuracy and training time at all tested sparsity levels.",
+  "failureConditions": [
+    "At extreme sparsity (90%) on smaller or imbalanced datasets such as UNSW-NB15, accuracy dropped to 50% for ResNet-50 and VGG-19, due to lack of samples and extreme parameter pruning",
+    "High sparsity causes early-round performance fluctuations before stabilizing by round 5"
+  ],
+  "costEvaluation": "Measured training and inference acceleration ratios across 10, 50, and 100 clients, with up to 90% model size reduction and FLOPs reduction through sparse execution (Torch-Pruning / DepGraph). Exact network transmission bytes per round were not reported.",
+  "limitations": [
+    {
+      "text": "Evaluated only under IID data distributions; non-IID class skew across clients was not tested empirically. (Authors)",
+      "theme": "No non-IID evaluation"
+    },
+    {
+      "text": "Did not evaluate defenses against poisoning attacks (data/model poisoning) or honest-but-curious server inference. (Authors)",
+      "theme": "No adversarial defense"
+    },
+    {
+      "text": "Not deployed on physical low-end edge hardware; evaluated in a simulated GPU-based environment. (Authors)",
+      "theme": "No real edge hardware deployment"
+    },
+    {
+      "text": "Uses complex pruned deep CNNs (ResNet/VGG) without feature attribution methods (e.g., SHAP/LIME) for security analysts.",
+      "theme": "No XAI"
+    },
+    {
+      "text": "Does not measure exact network bandwidth transmission bytes per round across gRPC/socket channels.",
+      "theme": "No communication overhead analysis"
+    }
+  ],
+  "futureWork": [
+    "Address non-IID data distributions to improve performance and convergence in heterogeneous environments",
+    "Tackle privacy and security issues such as poisoning attacks and honest-but-curious servers",
+    "Adapt Lightweight-Fed-NIDS to Industrial Control Systems (ICS) and Operational Technology (OT) environments"
+  ],
+  "relevance": "Crucial benchmark for lightweight FL, model pruning and compression for edge IDS, or CNN-based intrusion detection on UNSW-NB15, USTC-TFC2016, and CIC-IDS-2017.",
+  "newIdeas": [
+    "Non-IID robust and pruned FL-IDS: combine zero-shot structured pruning with non-IID FL algorithms (FedProx, pFedMe, SCAFFOLD) to prevent accuracy degradation under extreme data skew",
+    "XAI on pruned CNN features: apply SHAP / LIME to the 3-channel traffic image representations to explain which packet bytes drive intrusion alerts in pruned models",
+    "Poisoning-resilient pruned FL: combine zero-shot pruning with Byzantine-robust aggregation (Krum, Bulyan, Trimmed Mean) against malicious edge nodes"
+  ],
+  "reviewStatus": "Reviewed & Extracted",
+  "priority": "High",
+  "evidence": [
+    { "item": "Title, authors, journal, DOI", "page": "132415", "section": "I" },
+    { "item": "Problem & motivation", "page": "132415–132416", "section": "I, I-A" },
+    { "item": "Contributions", "page": "132416", "section": "I" },
+    { "item": "System architecture & flowchart", "page": "132418–132420", "section": "III-A", "ref": "Figs 1–4, Table 1" },
+    { "item": "Pruning & DepGraph formula", "page": "132420–132421", "section": "III-B1", "ref": "Eqs. (7)–(8)" },
+    { "item": "Datasets & traffic representation", "page": "132421–132423", "section": "IV-A", "ref": "Figs 7–10" },
+    { "item": "Results & scalability (10, 50, 100 clients)", "page": "132424–132430", "section": "IV-C", "ref": "Tables 2–13, Figs 11–21" },
+    { "item": "Limitations & future directions", "page": "132430", "section": "V" }
+  ]
+}
