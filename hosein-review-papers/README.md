@@ -1,4 +1,4 @@
-# Paper Atlas
+# Paper Vision
 `npm install && npm run dev`
 
 - Add a paper: drop a JSON file in `data/papers/` (see `lib/types.ts` for the schema; `limitations[].theme` drives gap detection).

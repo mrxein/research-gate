@@ -10,7 +10,7 @@ const sans = IBM_Plex_Sans({
   weight: ["400", "500", "600"],
   variable: "--f-sans",
 });
-export const metadata: Metadata = { title: "Paper Atlas" };
+export const metadata: Metadata = { title: "Paper Vision" };
 export default function Root({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
