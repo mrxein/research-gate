@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import AuthPanel from "@/components/AuthPanel";
 const nav = [
   ["/", "Dashboard"],
   ["/papers", "Papers"],
@@ -40,12 +41,17 @@ export default function Sidebar() {
           </Link>
         );
       })}
-      <button
-        onClick={toggle}
-        className="btn ml-auto whitespace-nowrap md:ml-0 md:mt-auto"
-      >
-        {dark ? "Light theme" : "Dark theme"}
-      </button>
+      <div className="flex flex-row gap-2 md:mt-auto md:flex-col">
+        <div className="hidden md:mt-auto md:block md:pb-2">
+          <AuthPanel />
+        </div>
+        <button
+          onClick={toggle}
+          className="btn ml-auto whitespace-nowrap md:ml-0 md:mt-auto"
+        >
+          {dark ? "Light theme" : "Dark theme"}
+        </button>
+      </div>
     </aside>
   );
 }

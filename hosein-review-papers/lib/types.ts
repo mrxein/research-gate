@@ -63,3 +63,12 @@ export interface Gap {
   papers: string[];
   evidence: string[];
 }
+
+export interface WS {
+  status: Record<string, Status>;
+  notes: Record<string, string>;
+  tags: Record<string, string[]>;
+  evidence: Record<string, Evidence[]>;
+  validated: Record<string, string>;
+  questions: string[];
+}
