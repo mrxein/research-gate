@@ -1,7 +1,7 @@
 import type { Paper } from "./types";
 export const DIMS: { key: string; label: string; get: (p: Paper) => string[] }[] = [
   { key: "problem", label: "Research problem", get: p => [p.problem] },
-  { key: "methodology", label: "Methodology", get: p => [p.methodology] },
+  { key: "methodology", label: "Methodology", get: p => p.methodology },
   { key: "datasets", label: "Datasets", get: p => p.datasets },
   { key: "partition", label: "IID / Non-IID", get: p => p.partition },
   { key: "flAlgorithms", label: "FL algorithms", get: p => p.flAlgorithms },
