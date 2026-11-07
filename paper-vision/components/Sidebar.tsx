@@ -6,9 +6,11 @@ import AuthPanel from "@/components/AuthPanel";
 const nav = [
   ["/", "Dashboard"],
   ["/papers", "Papers"],
+  ["/clusters", "Groups"],
   ["/compare", "Compare"],
   ["/research-gaps", "Research Gaps"],
   ["/matrix", "Research Matrix"],
+  ["/groups", "My Groups"],
 ];
 export default function Sidebar() {
   const path = usePathname();
@@ -27,7 +29,7 @@ export default function Sidebar() {
   return (
     <aside className="flex shrink-0 flex-row items-center gap-1 overflow-x-auto border-b border-slate-200 bg-white p-2 dark:border-slate-700/60 dark:bg-panel md:sticky md:top-0 md:h-screen md:w-56 md:flex-col md:items-stretch md:overflow-visible md:border-b-0 md:border-r md:p-4">
       <div className="hidden px-2 pb-4 font-serif text-lg font-semibold md:block">
-        Hosien's Paper
+        Paper Vision
       </div>
       {nav.map(([h, l]) => {
         const on = h === "/" ? path === "/" : path.startsWith(h);

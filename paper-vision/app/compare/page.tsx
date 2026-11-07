@@ -5,6 +5,57 @@ import { DIMS, differing } from "@/lib/dimensions";
 import { download, toCSV, toMarkdownTable } from "@/lib/export";
 import DimPicker from "@/components/DimPicker";
 import { Page } from "@/components/ui";
+
+const STOP = new Set(["and", "the", "for", "with", "via", "based"]);
+
+const tokenize = (s: string) =>
+  new Set(
+    s
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((t) => t.length > 2 && !STOP.has(t)),
+  );
+
+// For each paper's cell: item -> the words it shares with other papers' items.
+function sharedWords(vals: string[][], diff: Set<string>) {
+  const toks = vals.map((cell) => cell.map((x) => [x, tokenize(x)] as const));
+  return vals.map((cell, i) => {
+    const out = new Map<string, Set<string>>();
+    for (const [x, tx] of toks[i]) {
+      if (!diff.has(x)) continue;
+      const shared = new Set<string>();
+      toks.forEach((other, j) => {
+        if (j === i) return;
+        other.forEach(([, ty]) =>
+          tx.forEach((t) => ty.has(t) && shared.add(t)),
+        );
+      });
+      if (shared.size) out.set(x, shared);
+    }
+    return out;
+  });
+}
+
+function Highlighted({ text, words }: { text: string; words?: Set<string> }) {
+  if (!words) return <>{text}</>;
+  return (
+    <>
+      {text.split(/([a-z0-9]+)/i).map((part, k) =>
+        words.has(part.toLowerCase()) ? (
+          <mark
+            key={k}
+            className="rounded bg-amber-100 px-0.5 text-amber-900 dark:bg-amber-900/40 dark:text-amber-100"
+          >
+            {part}
+          </mark>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  );
+}
+
 export default function Compare() {
   const { papers } = useWorkspace();
   const [sel, setSel] = useState<string[]>([]);
@@ -25,7 +76,7 @@ export default function Compare() {
   return (
     <Page
       title="Compare"
-      sub="Select two or more papers. Amber items appear in some selected papers but not all."
+      sub="Select two or more papers. Amber words are shared with an item in another selected paper."
       actions={
         chosen.length > 1 && (
           <>
@@ -101,6 +152,7 @@ export default function Compare() {
               {rows.map((d) => {
                 const vals = chosen.map((p) => d.get(p));
                 const diff = differing(vals);
+                const marks = sharedWords(vals, diff);
                 return (
                   <tr
                     key={d.key}
@@ -111,15 +163,8 @@ export default function Compare() {
                       <td key={i} className="p-2">
                         <div className="flex flex-wrap gap-1">
                           {v.map((x) => (
-                            <span
-                              key={x}
-                              className={
-                                diff.has(x)
-                                  ? "rounded bg-amber-100 px-1.5 text-amber-900 dark:bg-amber-900/40 dark:text-amber-100"
-                                  : ""
-                              }
-                            >
-                              {x}
+                            <span key={x}>
+                              <Highlighted text={x} words={marks[i].get(x)} />
                             </span>
                           ))}
                         </div>
