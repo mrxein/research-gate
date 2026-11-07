@@ -1,4 +1,4 @@
-import GroupBoard from "@/components/groupBoard";
+import GroupBoard from "@/components/GroupBoard";
 import { Page } from "@/components/ui";
 
 export default function Groups() {
