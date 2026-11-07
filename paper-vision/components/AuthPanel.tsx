@@ -40,9 +40,10 @@ export default function AuthPanel() {
           const { error } = await supabase.auth.signInWithOtp({
             email,
             options: {
-              emailRedirectTo: `${window.location.origin}/auth/callback`
+              emailRedirectTo: `${window.location.origin}/auth/callback`,
             },
           });
+
           setMsg(
             error ? error.message : "Check your email for the sign-in link.",
           );
