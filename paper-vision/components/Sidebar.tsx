@@ -6,7 +6,7 @@ import AuthPanel from "@/components/AuthPanel";
 const nav = [
   ["/", "Dashboard"],
   ["/papers", "Papers"],
-  ["/clusters", "Groups"],
+  // ["/clusters", "Groups"],
   ["/compare", "Compare"],
   ["/research-gaps", "Research Gaps"],
   ["/matrix", "Research Matrix"],
