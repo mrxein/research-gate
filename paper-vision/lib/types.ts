@@ -64,6 +64,8 @@ export interface Gap {
   evidence: string[];
 }
 
+export interface PaperGroup { id: string; name: string }
+
 export interface WS {
   status: Record<string, Status>;
   notes: Record<string, string>;
@@ -71,4 +73,6 @@ export interface WS {
   evidence: Record<string, Evidence[]>;
   validated: Record<string, string>;
   questions: string[];
+  groups: PaperGroup[]; 
+  assign: Record<string, string>;
 }

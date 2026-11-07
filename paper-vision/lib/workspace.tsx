@@ -7,6 +7,7 @@ import { loadWorkspace, syncWorkspace } from "./workspace-db";
 
 export const empty: WS = {
   status: {}, notes: {}, tags: {}, evidence: {}, validated: {}, questions: [],
+  groups: [], assign: {},
 };
 
 interface Ctx {
