@@ -1,0 +1,176 @@
+{
+  "id": "p006",
+  "title": "Enhancing smart grid load forecasting: An attention-based deep learning model integrated with federated learning and XAI for security and interpretability",
+  "authors": [
+    "Md Al Amin Sarker",
+    "Bharanidharan Shanmugam",
+    "Sami Azam",
+    "Suresh Thennadil"
+  ],
+  "year": 2024,
+  "venue": "Intelligent Systems with Applications",
+  "doi": "10.1016/j.iswa.2024.200422",
+  "researchArea": "Smart Grid Load Forecasting, Federated Learning, Explainable AI, Deep Learning",
+  "tags": [
+    "Smart grid",
+    "Load forecasting",
+    "Deep learning",
+    "PSO",
+    "Explainable AI",
+    "Federated Learning",
+    "1D-CNN",
+    "GRU",
+    "SHAP",
+    "Pruning"
+  ],
+  "problem": "Dynamic changes across interconnected temporal and geographical factors create complexities in electricity demand forecasting, while privacy risks and high computational costs hinder centralized deep learning approaches in smart grid systems.",
+  "motivation": "Precise electric load forecasting is essential for optimizing energy distribution, demand response, and grid sustainability. Existing forecasting models often fail to simultaneously address data privacy, model interpretability, hyperparameter optimization, data imbalance, and parameter efficiency during distributed training.",
+  "noveltyAndContributions": [
+    "Proposed an attention-based 1D-CNN-GRU deep learning model that effectively extracts spatial feature hierarchies and captures long-term temporal dependencies.",
+    "Integrated Particle Swarm Optimization to systematically tune model hyperparameters, accelerating convergence and minimizing forecasting loss.",
+    "Utilized time-series data augmentation techniques including jittering, magnitude wrapping, and window slicing to prevent underfitting and overfitting.",
+    "Modified the Federated Learning aggregation mechanism by introducing layer-wise and magnitude-based pruning to reduce model parameter complexity and computational time while preserving data privacy.",
+    "Applied SHAP and LIME Explainable AI techniques to deliver transparent feature importance rankings across four diverse energy datasets."
+  ],
+  "methodology": [
+    "Data preprocessing including empty cell removal, median imputation for null values, DateTime conversion, and Min-Max scaling normalization to range 0 to 1.",
+    "Time-series augmentation using jittering, magnitude wrapping, and window slicing to expand sample diversity.",
+    "Baseline architecture integrating 1D-CNN blocks for feature extraction, Multi-Head Attention blocks for feature weighting, and sequential GRU layers for temporal sequence modeling.",
+    "Particle Swarm Optimization algorithm for hyperparameter optimization to select kernel size, activation function, learning rate, epoch count, optimizer, and GRU hidden units.",
+    "Federated Learning aggregation enhanced with layer-wise pruning (threshold 0.5) and magnitude-based pruning (threshold 0.2) to eliminate redundant neural weights.",
+    "Model interpretability analysis using SHAP bee swarm plots and feature rankings, supplemented by LIME."
+  ],
+  "keyAssumptions": [
+    "Time-series data can be formatted into temporal data batches of 24-hour sequence length for input into the neural network.",
+    "Smart grid participants can train local models and share pruned parameters with a central server without exposing raw sensitive energy consumption data.",
+    "Pruning less significant neurons and layers reduces resource requirements without causing severe degradation in forecasting accuracy."
+  ],
+  "datasets": [
+    "Panama Case Study Dataset (Panama electricity load, weather station data, and calendar school/holiday indicators)",
+    "Daily Electricity Price and Demand Dataset (Victoria State, Australia)",
+    "Household Electric Power Consumption Dataset (UCI Repository / Kaggle single household 4-year measurements)",
+    "Australia Load Dataset (Field electricity load data)"
+  ],
+  "partition": [
+    "Data formatted into 24-hour temporal batches per sequence.",
+    "Decentralized data partitioning across participating federated client edge nodes."
+  ],
+  "numClients": [
+    "10 client nodes initially configured for federated learning experiments evaluated across 3 communication rounds."
+  ],
+  "experimentalSetup": [
+    "Loss function: Huber Loss (smooth MAE) to handle anomalous data points and potential outliers.",
+    "Optimal Hyperparameters: Adam optimizer, learning rate 0.001, ReLU activation function, 100 epochs, kernel size 3, GRU units [1, 2].",
+    "Federated Learning setup: 10 clients, 3 communication rounds, layer pruning threshold 0.5, magnitude pruning threshold 0.2."
+  ],
+  "baselines": [
+    "ARIMA (AutoRegressive Integrated Moving Average statistical model)",
+    "ANN (Artificial Neural Network)",
+    "LSTM (Long Short-Term Memory)",
+    "BiLSTM (Bidirectional Long Short-Term Memory)",
+    "GRU (Gated Recurrent Unit)",
+    "FedAvg (Standard Federated Averaging)",
+    "FedSGD (Federated Stochastic Gradient Descent)"
+  ],
+  "flAlgorithms": [
+    "Proposed Federated Learning with Layer-Wise and Magnitude-Based Pruning Aggregation",
+    "FedAvg (Federated Averaging)",
+    "FedSGD (Federated Stochastic Gradient Descent)"
+  ],
+  "xaiMethods": [
+    "SHAP (SHapley Additive exPlanations with bee swarm impact plots and feature ranking)",
+    "LIME (Local Interpretable Model-Agnostic Explanations)"
+  ],
+  "xaiEvaluation": "Evaluated feature influence quantitatively based on mean absolute SHAP values across four datasets to identify key drivers such as temperature and weather station variables for Panama, recommended retail price demand for Victoria, Global Intensity for Household, and temperature/dew point for Australia Load.",
+  "metrics": [
+    "Mean Absolute Error",
+    "Mean Squared Error",
+    "Root Mean Squared Error",
+    "Max Error",
+    "Huber Loss",
+    "Computational Time in milliseconds",
+    "Number of Parameters"
+  ],
+  "results": "The proposed attention-based 1D-CNN-GRU model achieved superior forecasting accuracy across all datasets, obtaining MAE values of 0.12 (Victoria), 0.80 (Household), 16.48 (Australia Load), and 82.44 (Panama), outperforming ARIMA, ANN, LSTM, BiLSTM, and GRU baselines. In federated learning, layer-wise and magnitude-based pruning minimized loss while significantly reducing the number of parameters and computational execution time compared to FedAvg and FedSGD. SHAP feature ranking successfully identified key domain-specific energy consumption drivers for each region.",
+  "failureConditions": [
+    "Higher loss values and minor prediction discrepancies observed in Panama and Australia Load datasets due to high sample variability and extreme outlier events.",
+    "Higher loss values and overfitting tendencies observed in the BiLSTM baseline model across tested datasets."
+  ],
+  "costEvaluation": "The layer-wise and magnitude-based pruning strategy reduces overall parameter count and computational execution time per communication round compared to standard FedAvg and FedSGD. Although local SHAP value calculations and deep network training require memory and compute resources, pruning accelerates federated model execution for edge deployment.",
+  "limitations": [
+    {
+      "text": "Dataset anomalies and dynamic noise can adversely impact forecasting stability in high-variability energy datasets.",
+      "theme": "Data Anomaly Sensitivity"
+    },
+    {
+      "text": "The attention-based 1D-CNN-GRU model exhibits higher structural complexity than traditional baseline models, resulting in longer training times during federated learning rounds.",
+      "theme": "Model Complexity &amp; Execution Time"
+    },
+    {
+      "text": "SHAP feature importance ranking provides individual feature impact scores but does not fully uncover non-linear feature interaction dynamics.",
+      "theme": "Explainability Granularity"
+    },
+    {
+      "text": "Synchronization across distributed federated learning nodes presents potential network scalability bottlenecks.",
+      "theme": "Federated Scalability"
+    }
+  ],
+  "futureWork": [
+    "Apply advanced correlation techniques and feature preprocessing to explore interconnected feature relationships for deeper interpretability.",
+    "Extend the proposed model to other sequential forecasting tasks such as traffic prediction, stock price forecasting, and threat detection.",
+    "Explore Graph Neural Networks to capture complex spatial-temporal power grid structures.",
+    "Mitigate client selection randomization in federated learning to improve communication efficiency and transparency.",
+    "Adopt cloud-edge collaborative training architectures to enhance federated network scalability."
+  ],
+  "relevance": "Highly relevant for smart grid optimization, privacy-preserving energy management, time-series load forecasting, interpretable artificial intelligence, and communication-efficient federated learning.",
+  "newIdeas": [
+    "Combining layer-wise pruning and magnitude-based pruning in the federated server aggregation step to compress global models without losing predictive accuracy.",
+    "Integrating Particle Swarm Optimization with an Attention-based 1D-CNN-GRU architecture specifically tailored for multi-dataset smart grid load forecasting."
+  ],
+  "reviewStatus": "Published in Intelligent Systems with Applications, Volume 23, Article 200422, Elsevier (2024).",
+  "priority": "High",
+  "evidence": [
+    {
+      "item": "Framework architecture &amp; contributions",
+      "page": "1-3",
+      "section": "Introduction &amp; Methodology",
+      "ref": "Section 1, Section 3, Figure 1"
+    },
+    {
+      "item": "Dataset descriptions &amp; preprocessing/augmentation",
+      "page": "3-5",
+      "section": "Dataset description &amp; Dataset preprocessing",
+      "ref": "Section 3.1, Section 3.2"
+    },
+    {
+      "item": "PSO Hyperparameter Optimization",
+      "page": "6-7",
+      "section": "HPO optimization",
+      "ref": "Table 2, Algorithm 1"
+    },
+    {
+      "item": "Pruning-based Federated Learning Aggregation",
+      "page": "7-9",
+      "section": "Federated learning &amp; Proposed aggregation mechanism in FL",
+      "ref": "Algorithm 2, Figure 7"
+    },
+    {
+      "item": "Experimental Performance &amp; Baseline Comparison",
+      "page": "9-12",
+      "section": "Experimental results",
+      "ref": "Table 3, Figure 3, Figure 4, Figure 6"
+    },
+    {
+      "item": "Model Explainability (SHAP &amp; LIME)",
+      "page": "12-14",
+      "section": "Explainability of the proposed model &amp; Feature ranking",
+      "ref": "Figure 8, Figure 9"
+    },
+    {
+      "item": "Limitations &amp; Future Directions",
+      "page": "14-16",
+      "section": "Discussion, Conclusion &amp; Future work",
+      "ref": "Section 7, Section 9"
+    }
+  ]
+}
