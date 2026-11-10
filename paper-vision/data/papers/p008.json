@@ -1,0 +1,128 @@
+{
+  "id": "p008",
+  "title": "Evaluation of Applying Federated Learning to Distributed Intrusion Detection Systems Through Explainable AI",
+  "authors": ["Ayaka Oki", "Yukio Ogawa", "Kaoru Ota", "Mianxiong Dong"],
+  "year": 2024,
+  "venue": "IEEE Networking Letters",
+  "doi": "10.1109/LNET.2024.3465516",
+  "researchArea": "Cybersecurity, Distributed Intrusion Detection Systems, Federated Learning, Explainable AI",
+  "tags": [
+    "Distributed Intrusion Detection System",
+    "Deep Learning",
+    "Federated Learning",
+    "Explainable Artificial Intelligence",
+    "SHAP",
+    "UNSW-NB15",
+    "MLP"
+  ],
+  "problem": "Decreased volume of local training data per edge server in distributed intrusion detection systems degrades attack detection recall by up to 21 percent, while black-box deep learning models lack transparency for detection decisions.",
+  "motivation": "Distributed intrusion detection systems deployed at network edges suffer from reduced local data availability. Evaluating how Federated Learning restores detection accuracy using Explainable AI feature attribution distances provides formal verification of federated learning benefits across individual attack classes.",
+  "noveltyAndContributions": [
+    "Simulated independent learning and horizontal federated learning using Federated Averaging in a distributed intrusion detection system across 100 edge servers and compared performance against a non-distributed baseline.",
+    "Utilized Explainable AI Kernel SHAP feature attribution Euclidean distances to explain and verify the performance recovery mechanism of Federated Learning over independent learning across multi-class attack categories.",
+    "Identified the correlation between the number of primary features per attack class and the degree of detection degradation caused by distributed local data constraints."
+  ],
+  "methodology": [
+    "Preprocessing comprising One-Hot Encoding for categorical features, Box-Cox transformation and percentile outlier removal below 1st percentile and above 99th percentile for numerical features, and Min-Max normalization scaling values to range 0 to 1.",
+    "Multi-Layer Perceptron architecture at each edge server with 7 fully-connected layers containing 201 input neurons, hidden layers of 1024, 528, 246, 128, 64 neurons with ReLU activation, and 6 output neurons with Softmax.",
+    "Independent local training versus Horizontal Federated Learning using Federated Averaging across edge servers.",
+    "Feature attribution and explanation similarity analysis calculated using Kernel SHAP values and Euclidean feature distances between distributed and non-distributed models."
+  ],
+  "keyAssumptions": [
+    "Edge servers monitor distinct distributed network traffic flows while sharing identical feature sets and classification labels.",
+    "Equal weighting across attack classes in training data with 150,000 flows per class achieved via flow duplication.",
+    "Test data is evaluated uniformly across edge servers to measure model representation differences against the non-distributed benchmark."
+  ],
+  "datasets": [
+    "UNSW-NB15 dataset filtered to 6 attack classes (Normal, Generic, Fuzzer, Exploit, Reconnaissance, DoS) with 201 features post-preprocessing."
+  ],
+  "partition": [
+    "70:15:15 ratio for training, validation, and test data splits.",
+    "900,000 total balanced training flows split equally across 100 edge servers (9,000 flows per edge server)."
+  ],
+  "numClients": [
+    "100 edge server clients in the distributed intrusion detection system network"
+  ],
+  "experimentalSetup": [
+    "Fully connected 7-layer MLP neural network with layer sizes 201, 1024, 528, 246, 128, 64, 6.",
+    "ReLU activation for hidden layers, Softmax for output layer, Dropout strength 0.01.",
+    "Adam optimizer, cross-entropy loss function, 50 local training epochs per server.",
+    "Built using Keras with TensorFlow and Flower federated learning framework with 5 aggregation rounds of Federated Averaging."
+  ],
+  "baselines": [
+    "Non-distributed intrusion detection system baseline with centralized training on all 900,000 training flows",
+    "Independent learning in distributed intrusion detection system with local training on 9,000 flows per server without aggregation"
+  ],
+  "flAlgorithms": ["Federated Averaging"],
+  "xaiMethods": ["Kernel SHAP (Shapley Additive exPlanations)"],
+  "xaiEvaluation": "Feature influence evaluated using Kernel SHAP values. Feature distance between distributed or federated models and non-distributed baseline computed using Euclidean norm over SHAP value vectors. Primary features defined as those covering up to 90 percent cumulative SHAP contribution.",
+  "metrics": [
+    "Recall (attack detection rate)",
+    "Accuracy",
+    "Euclidean Feature Distance between SHAP value vectors",
+    "Number of Primary Features covering 90 percent cumulative SHAP contribution"
+  ],
+  "results": "Applying Federated Averaging to distributed intrusion detection recovered recall across all attack classes to near non-distributed levels (Normal 94%, Generic 97%, Fuzzer 85%, Exploit 21%, Reconnaissance 57%, DoS 74%), overcoming up to 21% recall degradation observed in independent learning. XAI evaluation confirmed that feature distances between federated learning and non-distributed models decreased significantly across all attack classes compared to independent learning.",
+  "failureConditions": [
+    "Independent learning suffers severe recall degradation (up to 21% to 25% drop for Fuzzer and DoS) and high server variance (up to 57%) due to limited local data.",
+    "Attack classes with many primary features (such as Exploit with 30, Fuzzer with 27, Reconnaissance with 25) suffer greater degradation in distributed environments without federated aggregation."
+  ],
+  "costEvaluation": "Kernel SHAP calculation over 201 features requires notable computational effort per edge server during model evaluation. Federated Averaging requires only 5 aggregation rounds, keeping network communication overhead low for 100 edge servers.",
+  "limitations": [
+    {
+      "text": "Kernel SHAP feature contribution calculations incur noticeable computational overhead on edge servers during model evaluation.",
+      "theme": "XAI Computational Complexity"
+    },
+    {
+      "text": "Certain attack classes like Exploit exhibit low absolute detection recall (21%) due to high feature overlap and small feature distance to other attack classes.",
+      "theme": "Detection Performance Bottleneck"
+    },
+    {
+      "text": "Evaluations relied on uniform random data partitioning across edge servers rather than real-world dynamic non-IID traffic distributions.",
+      "theme": "Synthetic Partitioning &amp; Non-IID Limitations"
+    }
+  ],
+  "futureWork": [
+    "Dynamically adjust training data per federated learning round to accommodate temporal changes in edge network traffic.",
+    "Evaluate federated learning performance under dynamic non-IID traffic shifts using XAI feature attribution analysis."
+  ],
+  "relevance": "Highly relevant for privacy-preserving distributed intrusion detection, federated learning validation, explainable AI with SHAP feature distance metrics, and IoT edge network security.",
+  "newIdeas": [
+    "Using Euclidean distance between SHAP attribution vectors as a quantitative XAI metric to explain and verify the convergence and fidelity of Federated Learning global models against centralized baselines.",
+    "Correlating the number of primary features (features comprising 90 percent cumulative SHAP impact) with an attack class sensitivity to local data degradation in distributed learning."
+  ],
+  "reviewStatus": "Published in IEEE Networking Letters, Volume 6, Number 4, pages 248-252 (2024).",
+  "priority": "High",
+  "evidence": [
+    {
+      "item": "Paper title, authors, venue, publication date",
+      "page": "1",
+      "section": "Header and Footnote",
+      "ref": "IEEE Networking Letters, Vol 6, No 4 (2024)"
+    },
+    {
+      "item": "System architecture and FL process",
+      "page": "1-2",
+      "section": "Section II. System Model",
+      "ref": "Section II-A, II-B, II-C, Figure 1, Figure 2"
+    },
+    {
+      "item": "Dataset partitioning, preprocessing, and MLP setup",
+      "page": "2-3",
+      "section": "Section III. Evaluation Method",
+      "ref": "Section III-A, III-B, III-C, Table I"
+    },
+    {
+      "item": "Experimental results and SHAP feature distance analysis",
+      "page": "3-4",
+      "section": "Section IV. Results and Discussion",
+      "ref": "Section IV, Figure 3, Figure 4, Figure 5, Figure 6, Table II"
+    },
+    {
+      "item": "Conclusion and future work directions",
+      "page": "4",
+      "section": "Section V. Conclusion",
+      "ref": "Section V"
+    }
+  ]
+}
