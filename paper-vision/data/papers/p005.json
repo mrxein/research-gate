@@ -1,0 +1,156 @@
+{
+  "id": "p005",
+  "title": "Federated Learning of Explainable AI(FedXAI) for deep learning-based intrusion detection in IoT networks",
+  "authors": ["Rajesh Kalakoti", "Sven Nõmm", "Hayretdin Bahsi"],
+  "year": 2025,
+  "venue": "Computer Networks",
+  "doi": "10.1016/j.comnet.2025.111479",
+  "researchArea": "Cybersecurity, Federated Learning, Explainable AI, IoT Intrusion Detection Systems",
+  "tags": [
+    "Federated Learning",
+    "Explainable AI",
+    "IoT Networks",
+    "Intrusion Detection",
+    "SHAP",
+    "LSTM",
+    "SMPC"
+  ],
+  "problem": "Integrating Explainable AI into Federated Learning for IoT intrusion detection without violating client data privacy, as traditional post-hoc XAI methods like SHAP require central access to client raw data or background baselines to interpret the global model.",
+  "motivation": "Security Operation Center analysts struggle to trust black-box Deep Learning models in intrusion detection systems without interpretability. Existing federated learning solutions ensure privacy during training but lack privacy-preserving explainability mechanisms for the server-side global model.",
+  "noveltyAndContributions": [
+    "Proposed the FedXAI framework combining LSTM-based horizontal federated learning with privacy-preserving SHAP explanations for IoT intrusion detection.",
+    "Introduced a Secure Multiparty Computation Secret Sharing protocol to securely aggregate client-side SHAP values into global server explanations without sharing raw client data.",
+    "Rigorously evaluated local post-hoc explanations (SHAP, LIME, IG) across participating clients using four quantitative metrics: High Faithfulness, Monotonicity, Low Complexity, and Max Sensitivity.",
+    "Achieved state-of-the-art detection performance across binary, botnet-type, and attack-type classification tasks on the N-BaIoT dataset."
+  ],
+  "methodology": [
+    "Long Short-Term Memory neural network trained via Federated Averaging in Horizontal Federated Learning.",
+    "Min-Max feature scaling preprocessing standardizing data within range 0 to 1.",
+    "Secure aggregation of client SHAP attributions using a Secure Multiparty Computation Secret Sharing protocol.",
+    "Verification of securely aggregated client SHAP values against server global baseline using an element-wise divergence matrix.",
+    "Post-hoc local explanations for client models evaluated using LIME, Integrated Gradients, and SHAP."
+  ],
+  "keyAssumptions": [
+    "Clients share identical feature and label space in a Horizontal Federated Learning setting.",
+    "Participating clients execute the Secure Multiparty Computation Secret Sharing protocol for secure SHAP value aggregation.",
+    "Data is partitioned in an independent and identically distributed setting across IoT edge devices for baseline analysis."
+  ],
+  "datasets": [
+    "N-BaIoT dataset containing 115 network traffic statistical features from 9 IoT devices infected by Mirai and Gafgyt botnets."
+  ],
+  "partition": [
+    "80:20 train and validation split on local client data",
+    "Independent and identically distributed data distribution across participating IoT client devices"
+  ],
+  "numClients": [
+    "9 IoT device clients for binary classification (Doorbell1, BabyMonitor, SecurityCam1, SecurityCam2, Thermostat, SecurityCam3, SecurityCam4, Doorbell2, Webcam)",
+    "7 IoT device clients for multiclass botnet-type and attack-type detection (excluding Doorbell2 and Webcam due to missing Mirai botnet traffic)"
+  ],
+  "experimentalSetup": [
+    "AMD Threadripper 3960X CPU (24 cores, 48 threads), 128 GB RAM, NVIDIA RTX 3090 GPU (24 GB VRAM), Ubuntu 20.04 LTS HPC cluster node using Slurm.",
+    "Python 3.9, Flower federated learning framework with PyTorch.",
+    "Hyperparameters: Adam optimizer with learning rate 0.001, ReLU activation function.",
+    "Batch size: 256 for binary and botnet-type classification, 512 for attack-type classification.",
+    "Local epochs: 50 for binary, 100 for botnet-type, 200 for attack-type classification.",
+    "Communication rounds: 10 for binary, 50 for botnet-type, 2000 for attack-type classification.",
+    "50 percent random client selection per round during training, 100 percent participation in evaluation."
+  ],
+  "baselines": [
+    "MLP (Rey et al.) with Mini-Batch Multi-Epoch aggregation",
+    "Deep Autoencoder / FedDetect (Zhang et al.)",
+    "DNN (Wardana et al.) with FedAvg",
+    "ANN (Palla and Tayeb) centralized model",
+    "CNN (Do et al.) with Mini-Batch aggregation",
+    "LSTM (Parra et al.) distributed learning model",
+    "FL-DNN (Olanrewaju-George et al.) with FedAvgM",
+    "Server-side SHAP explanations generated with direct access to client training and testing data"
+  ],
+  "flAlgorithms": ["Federated Averaging in Horizontal Federated Learning"],
+  "xaiMethods": [
+    "SHAP (DeepExplainer)",
+    "LIME (Local Interpretable Model-Agnostic Explanations)",
+    "Integrated Gradients (IG)"
+  ],
+  "xaiEvaluation": "Quantitative evaluation of local post-hoc explanations across 2000 test data points per client using four metrics: High Faithfulness correlation, Monotonicity percentage, Low Complexity entropy, and Max Sensitivity (radius r=0.1).",
+  "metrics": [
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "F1-Score",
+    "High Faithfulness correlation",
+    "Low Complexity entropy",
+    "Monotonicity percentage",
+    "Max Sensitivity",
+    "Divergence matrix difference between server-side and client-side explanations"
+  ],
+  "results": "The FedAvg LSTM model achieved 99.90% accuracy (99.99% F1-score) for binary malware detection, 99.28% accuracy (99.54% F1-score) for botnet-type detection, and 94.89% accuracy (94.50% F1-score) for attack-type detection. Securely aggregated client SHAP explanations closely approximated full-access server explanations with divergence values near zero. SHAP outperformed LIME and IG in faithfulness, lower complexity, monotonicity, and stability.",
+  "failureConditions": [
+    "Minor divergence between client-aggregated and server global explanations observed for specific features such as MI_dir_L0.1_weight and H_L0.1_weight under local sample variations.",
+    "Performance fluctuations during early communication rounds for specific heterogeneous IoT devices like Thermostat and SecurityCam4."
+  ],
+  "costEvaluation": "Computing SHAP values via DeepExplainer on local clients is computationally expensive due to game-theoretic Shapley value estimations. SMPC secret sharing aggregation is lightweight and introduces minimal communication overhead during federated rounds. Evaluating Max Sensitivity is computationally intensive due to neighborhood distance search.",
+  "limitations": [
+    {
+      "text": "High computational complexity of SHAP value calculation makes scaling to large numbers of IoT clients less feasible.",
+      "theme": "Scalability &amp; Computational Overhead"
+    },
+    {
+      "text": "Experiments evaluated performance on independent and identically distributed data splits rather than realistic non-IID IoT data distributions.",
+      "theme": "Data Distribution &amp; Realism"
+    },
+    {
+      "text": "SMPC aggregation remains vulnerable to inference attacks, adversarial manipulation of post-hoc explanations, explanation-based membership inference attacks, and federated model poisoning attacks.",
+      "theme": "Security &amp; Privacy Vulnerabilities"
+    },
+    {
+      "text": "Resource constraints of edge IoT devices (limited compute, memory, battery, bandwidth) make training deep networks energy-intensive and time-consuming.",
+      "theme": "Resource Constraints"
+    }
+  ],
+  "futureWork": [
+    "Explore synthetic data generation at the server to calculate global model explanations without relying on client SHAP aggregation.",
+    "Evaluate FedXAI under non-IID data distributions and heterogeneous IoT network topologies.",
+    "Integrate homomorphic encryption and differential privacy to defend against inference attacks and adversarial explanation manipulation.",
+    "Implement Byzantine-robust aggregation methods such as Krum, Trimmed Mean, and Median filtering against model poisoning.",
+    "Apply model pruning and adaptive client selection to optimize energy and resource consumption on edge devices."
+  ],
+  "relevance": "Highly relevant for privacy-preserving cybersecurity, trustworthy explainable AI, IoT botnet detection, and quantitative XAI evaluation in federated learning architectures.",
+  "newIdeas": [
+    "Privacy-preserving SMPC Secret Sharing aggregation of Shapley values from federated learning clients to explain server global models without raw data transfer.",
+    "Quantitative multi-metric benchmarking framework (Faithfulness, Monotonicity, Complexity, Sensitivity) for post-hoc XAI in federated security settings."
+  ],
+  "reviewStatus": "Published in Computer Networks, Volume 270, Article 111479, Elsevier (2025).",
+  "priority": "High",
+  "evidence": [
+    {
+      "item": "Framework proposal &amp; SMPC aggregation",
+      "page": "1-3",
+      "section": "Introduction Explaining server-side black box model in FL",
+      "ref": "Section 1, Section 3.5, Algorithm 1"
+    },
+    {
+      "item": "Dataset details &amp; client partitioning",
+      "page": "3-4",
+      "section": "Dataset",
+      "ref": "Table 1, Table 2"
+    },
+    {
+      "item": "Detection performance results",
+      "page": "11-13",
+      "section": "Performance evaluation of LSTM model &amp; Discussions",
+      "ref": "Table 3, Table 6"
+    },
+    {
+      "item": "XAI quantitative metrics evaluation",
+      "page": "13-16",
+      "section": "Explaining client-side black box models in FL",
+      "ref": "Table 4"
+    },
+    {
+      "item": "Limitations, security threats, and future directions",
+      "page": "15-16",
+      "section": "Limitations and threats to validity &amp; Conclusion",
+      "ref": "Section 6, Section 7"
+    }
+  ]
+}
