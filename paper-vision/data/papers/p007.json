@@ -1,0 +1,168 @@
+{
+  "id": "p007",
+  "title": "A federated and transfer learning framework for high-accuracy, explainable intrusion detection in next-generation data centers",
+  "authors": [
+    "Mbarek Marwan",
+    "Mohammed Chemmakha",
+    "Abdelkarim Ait Temghart",
+    "Mohamed Lazaar"
+  ],
+  "year": 2026,
+  "venue": "Discover Artificial Intelligence (Springer)",
+  "doi": "10.1007/s44163-026-00955-4",
+  "researchArea": "Cybersecurity, Federated Learning, Transfer Learning, Explainable AI, Intrusion Detection Systems in Edge-Cloud Data Centers",
+  "tags": [
+    "Federated Learning",
+    "Transfer Learning",
+    "Explainable AI",
+    "Intrusion Detection",
+    "SHAP",
+    "PFI",
+    "Metaheuristic Optimization",
+    "SMOTE-Tomek",
+    "ResNet50",
+    "InceptionV3",
+    "DenseNet121",
+    "UNSW-NB15"
+  ],
+  "problem": "Traditional deep learning-based intrusion detection systems in next-generation edge-cloud data centers face challenges regarding data privacy, transmission latency, centralized architecture dependencies, dataset class imbalance, and black-box decision opacity.",
+  "motivation": "Securing resource-constrained edge-cloud data centers against evolving cybersecurity threats requires fast, decentralized, privacy-preserving, and transparent intrusion detection architectures that eliminate raw client data transmission while delivering high predictive performance.",
+  "noveltyAndContributions": [
+    "Proposed FedTran, a novel framework combining Federated Learning (FedAvg) and Transfer Learning (TL) for collaborative, privacy-preserving intrusion detection in edge data centers.",
+    "Integrated SMOTE-Tomek Links data rebalancing with metaheuristic feature selection combining Particle Swarm Optimization, Growth Optimizer Algorithm, and Whale Optimization Algorithm using a union-based strategy.",
+    "Mapped tabular network traffic features into 3D RGB image matrices to enable spatial feature extraction using pretrained CNN architectures.",
+    "Developed a Kappa-weighted ensemble model fusing ResNet50, InceptionV3, and DenseNet121 based on Cohen's Kappa agreement coefficient.",
+    "Incorporated post-hoc Explainable AI using SHAP and Permutation Feature Importance for global and local interpretability as well as hyperparameter tuning guidance."
+  ],
+  "methodology": [
+    "Data preprocessing using one-hot encoding for categorical variables, isolation forest for outlier removal, and Min-Max normalization scaling features to range 0 to 255.",
+    "Class imbalance mitigation using SMOTE oversampling and Tomek Links undersampling post-processing.",
+    "Metaheuristic feature selection using Particle Swarm Optimization, Growth Optimizer Algorithm, and Whale Optimization Algorithm, merged via a union-based aggregation strategy.",
+    "Mapping tabular feature chunks into 3D RGB image blocks of dimensions 64 by 64 by 64 or resized to 256 by 256 by 3 for CNN input.",
+    "Ensemble Transfer Learning combining pretrained ResNet50, InceptionV3, and DenseNet121 fine-tuned with Adam optimizer.",
+    "Kappa coefficient weighting scheme to dynamically weight base CNN models in the ensemble.",
+    "Decentralized collaborative training across 10 edge nodes using Federated Averaging.",
+    "Post-hoc explainability using SHAP summary plots, waterfall plots, force plots, value clustering, and Permutation Feature Importance."
+  ],
+  "keyAssumptions": [
+    "Network flow tabular features can be effectively converted into 3D RGB image matrices to leverage spatial CNN feature representations.",
+    "Edge nodes can perform local training on private dataset partitions and share model updates with a cloud server without revealing raw data.",
+    "Union-based aggregation of metaheuristic feature selection subsets retains greater discriminative power than intersection-based selection."
+  ],
+  "datasets": [
+    "UNSW-NB15 dataset containing 42 clean network flow features, evaluated under binary and 9 attack categories including Fuzzers, Analysis, Backdoors, DoS, Exploits, Generic, Reconnaissance, Shellcode, and Worms."
+  ],
+  "partition": [
+    "70:30 train and test split for centralized transfer learning experiments",
+    "Dataset partitioned into 10 distinct edge client subsets for federated learning experiments"
+  ],
+  "numClients": ["10 edge node clients for federated learning experiments"],
+  "experimentalSetup": [
+    "Pretrained CNN Fine-Tuning: ImageNet pre-trained weights, 10 training epochs, Adam optimizer, learning rate 0.0001, batch size 32, categorical cross-entropy loss, ReLU activation, Softmax output layer, 0.5 dropout rate, input image resolution 256 by 256 by 3.",
+    "Federated Learning Setup: 10 edge clients, 5 communication rounds, 2 local epochs per round, mini-batch size 32, Adam optimizer with learning rate 0.0001, FedAvg aggregation.",
+    "Baseline ML Setup: Support Vector Machine with RBF kernel (C=1.0, gamma=scale) and K-Nearest Neighbors with k=5 nearest neighbors and Euclidean distance."
+  ],
+  "baselines": [
+    "Base CNN (OnlyCNN / BCNN)",
+    "VGG16",
+    "EfficientNetB0",
+    "MobileNetV3-Small",
+    "Support Vector Machine (SVM with RBF kernel)",
+    "K-Nearest Neighbors (KNN)",
+    "Intersection-based feature selection approach"
+  ],
+  "flAlgorithms": ["Federated Averaging (FedAvg)"],
+  "xaiMethods": [
+    "SHAP (Shapley Additive exPlanations - summary plots, waterfall plots, force plots, value clustering)",
+    "PFI (Permutation Feature Importance)"
+  ],
+  "xaiEvaluation": "Feature importance was evaluated globally and locally across binary and multi-class classification tasks using SHAP feature attribution values and PFI weights, validating that key features (dttl, ct_state_ttl, ct_dst_src_ltm, sttl, service, sload) drive decision boundaries while providing hyperparameter tuning insights.",
+  "metrics": [
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "F1-Score",
+    "Matthews Correlation Coefficient",
+    "Geometric Mean",
+    "Kappa Coefficient",
+    "Confusion Matrix"
+  ],
+  "results": "The Transfer Learning ensemble achieved 99.98% accuracy (99.96% precision, 100% recall, 99.98% F1-score) in binary classification and 96.82% accuracy in multi-class classification on UNSW-NB15. FedAvg achieved 96.06% accuracy in binary classification and 85.75% accuracy in multi-class classification across 10 clients, outperforming SVM (62.70%) and KNN (68.85%). Union-based feature selection reached 95.60% accuracy compared to 87.47% for intersection-based selection. SHAP and PFI confirmed high agreement on top discriminative features.",
+  "failureConditions": [
+    "Intersection-based feature selection suffers significant performance drop (accuracy drops to 87.47% binary and 75.44% multi-class) due to excessive elimination of complementary features.",
+    "MobileNetV3-Small and EfficientNetB0 pre-trained models performed poorly on converted intrusion detection images (accuracy 79.36% and 80.53% respectively)."
+  ],
+  "costEvaluation": "Transfer learning incurs a one-time pretraining cost amortized offline, with fine-tuning complexity scaling with task dataset size and parameter transfer cost. Federated Learning local training scales with local epochs and dataset size per edge, with server aggregation complexity scaling linearly with the number of participating edge nodes. SHAP calculation introduces polynomial approximation overhead on edge nodes.",
+  "limitations": [
+    {
+      "text": "SHAP and Permutation Feature Importance face potential explanation instability and sensitivity challenges in noisy data center environments.",
+      "theme": "XAI Stability &amp; Noise Sensitivity"
+    },
+    {
+      "text": "High computational overhead of SHAP value approximation under edge resource constraints.",
+      "theme": "Computational Complexity"
+    },
+    {
+      "text": "Converting tabular dataset into 3D RGB image blocks requires fixed resolution resizing and extra preprocessing overhead.",
+      "theme": "Data Transformation Overhead"
+    }
+  ],
+  "futureWork": [
+    "Apply Quantum Deep Autoencoders to address anomaly detection with reduced parameter requirements in edge data centers.",
+    "Integrate Variational Autoencoders for synthetic data generation to handle severe data imbalance.",
+    "Investigate non-IID data distributions and advanced data partitioning strategies in federated learning.",
+    "Evaluate explanation stability, cross-client consistency, and method agreement across different XAI techniques."
+  ],
+  "relevance": "Highly relevant for next-generation data center security, edge-cloud cybersecurity, privacy-preserving federated learning, transfer learning on tabular-to-image data, and explainable AI.",
+  "newIdeas": [
+    "FedTran framework integrating Federated Averaging with Transfer Learning and Explainable AI for edge-cloud intrusion detection.",
+    "Kappa-weighted fusion of pre-trained CNNs (ResNet50, InceptionV3, DenseNet121) based on Cohen's Kappa agreement metric.",
+    "Union-based aggregation of metaheuristic feature selection algorithms (PSO, GOA, WOA) to preserve feature diversity."
+  ],
+  "reviewStatus": "Published in Discover Artificial Intelligence (Springer), Volume 6, Article 255 (2026).",
+  "priority": "High",
+  "evidence": [
+    {
+      "item": "Paper title, authors, venue, and abstract framework",
+      "page": "1-2",
+      "section": "Introduction &amp; Abstract",
+      "ref": "Discover Artificial Intelligence (2026) 6:255"
+    },
+    {
+      "item": "SMOTE-Tomek Links &amp; Metaheuristic Feature Selection (PSO, GOA, WOA)",
+      "page": "3-8",
+      "section": "Data preprocessing &amp; Feature selection",
+      "ref": "Algorithms 1 &amp; 2"
+    },
+    {
+      "item": "Tabular-to-image conversion &amp; Kappa-weighted Transfer Learning",
+      "page": "8-12",
+      "section": "Transfer learning &amp; Weighted ensemble model",
+      "ref": "Figure 3, Figure 4, Table 3"
+    },
+    {
+      "item": "Federated Learning setup &amp; FedAvg algorithm",
+      "page": "12-14",
+      "section": "Federated learning &amp; Computational complexity",
+      "ref": "Algorithm 4, Figure 5"
+    },
+    {
+      "item": "Experimental performance &amp; baseline comparison",
+      "page": "15-20",
+      "section": "Simulation result &amp; 5.1/5.2 FL/TL evaluation",
+      "ref": "Table 2, Table 4, Table 6, Table 7, Table 8"
+    },
+    {
+      "item": "XAI evaluation (SHAP &amp; PFI)",
+      "page": "20-24",
+      "section": "Explainable deep learning",
+      "ref": "Figure 24, Figure 25, Figure 26, Figure 27, Figure 28, Figure 29"
+    },
+    {
+      "item": "Limitations &amp; Future Work",
+      "page": "24-25",
+      "section": "Conclusion",
+      "ref": "Section 6"
+    }
+  ]
+}
