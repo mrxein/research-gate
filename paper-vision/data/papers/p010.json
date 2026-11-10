@@ -1,0 +1,167 @@
+{
+  "id": "p010",
+  "title": "Federated Learning-Based Explainable Anomaly Detection for Industrial Control Systems",
+  "authors": [
+    "Truong Thu Huong",
+    "Ta Phuong Bac",
+    "Kieu Ngan Ha",
+    "Nguyen Viet Hoang",
+    "Nguyen Xuan Hoang",
+    "Nguyen Tai Hung",
+    "Kim Phuc Tran"
+  ],
+  "year": 2022,
+  "venue": "IEEE Access",
+  "doi": "10.1109/ACCESS.2022.3173288",
+  "researchArea": "Cybersecurity, Industrial Control Systems, Federated Learning, Explainable AI, Anomaly Detection",
+  "tags": [
+    "Anomaly detection",
+    "ICS",
+    "Federated learning",
+    "XAI",
+    "VAE",
+    "SVDD",
+    "Edge computing"
+  ],
+  "problem": "Existing anomaly detection solutions for Industrial Control Systems struggle to simultaneously achieve high detection accuracy, fast model retraining, lightweight resource consumption for edge deployment, and interpretability for predicted anomalies without compromising client data privacy.",
+  "motivation": "Smart manufacturing and IIoT-based Industrial Control Systems are increasingly targeted by complex cyber threats. Security analysts require lightweight, privacy-preserving, fast-converging anomaly detection models deployed near data sources that also provide actionable feature-level explanations to establish operational trust.",
+  "noveltyAndContributions": [
+    "Proposed FedeX, a novel hybrid architecture combining Variational Autoencoder for reconstruction-based anomaly detection, Federated Learning for privacy-preserving distributed model aggregation, Support Vector Data Description for dynamic threshold calculation, and SHAP for Explainable AI.",
+    "Validated FedeX on a real-world physical edge testbed using four Raspberry Pi 4 edge nodes connected over MQTT to a central workstation cloud server.",
+    "Demonstrated lightweight edge resource footprints with peak memory usage of 14 percent, total training time of 7.5 minutes across 3 communication rounds, and low bandwidth consumption.",
+    "Outperformed 14 baseline anomaly detection methods on the SCADA liquid storage infrastructure dataset and achieved state-of-the-art results on the SWaT benchmark dataset."
+  ],
+  "methodology": [
+    "Local Variational Autoencoder model with two fully connected encoder hidden layers and two fully connected decoder hidden layers to compress and reconstruct normal data patterns at edge nodes.",
+    "Horizontal Federated Learning using Federated Averaging over MQTT broker to aggregate local VAE model weights across 4 manufacturing zones into a unified global model.",
+    "Support Vector Data Description with a Laplacian kernel trained on VAE reconstruction error vectors to determine an optimal hypersphere decision boundary radius R.",
+    "Post-hoc Explainable AI using Kernel SHAP to calculate feature Shapley values on predicted anomalous samples and map feature attributions to physical SCADA components."
+  ],
+  "keyAssumptions": [
+    "Training data primarily comprises normal system operation patterns, allowing reconstruction error metrics to signal abnormal events.",
+    "Distributed manufacturing zones monitor identical feature representations from physical sensors and actuators.",
+    "Resource-constrained edge devices possess sufficient computational capacity to execute local VAE training and SVDD threshold estimation."
+  ],
+  "datasets": [
+    "SCADA liquid storage infrastructure dataset containing 10 sensor and actuator features (IN0, IN1, IN2, IN3, R4, Slope, PG, VG, PP, VP) across 14 operational anomaly scenarios.",
+    "Secure Water Treatment (SWaT) benchmark dataset used for cross-validation."
+  ],
+  "partition": [
+    "SCADA training data split into 4 independent sub-datasets assigned to 4 distributed edge zones for local training.",
+    "4 separate test sets containing normal and abnormal samples evaluated at each edge node."
+  ],
+  "numClients": ["4 Raspberry Pi 4 Model B edge device clients"],
+  "experimentalSetup": [
+    "Hardware: 4 Raspberry Pi 4 Model B edge devices (quad-core 1.5 GHz ARM Cortex-A72, 4 GB RAM) and 1 Dell Precision 3640 Workstation (Intel Core i7-10700K 3.8 GHz, 16 GB RAM) cloud server connected over Wi-Fi router.",
+    "Software: Python 3, TensorFlow 2, FedML framework, EMQ X Broker for MQTT message exchange.",
+    "Hyperparameters: Adam optimizer, 3 communication rounds for convergence, local training epochs per round, Laplacian kernel for SVDD."
+  ],
+  "baselines": [
+    "Centralized VAE-SVDD model",
+    "Logistic Regression (LR)",
+    "Linear Discriminant Analysis (LDA)",
+    "K-Nearest Neighbors (KNN)",
+    "Classification and Regression Tree (CART)",
+    "Naïve Bayes (NB)",
+    "Support Vector Machine (SVM)",
+    "Deep Neural Networks (DNN)",
+    "Multi-Layer Perceptron (MLP)",
+    "Convolutional Neural Network (CNN)",
+    "Recurrent Neural Network (RNN)",
+    "Long Short-Term Memory (LSTM)",
+    "MADICS (LSTM-based methodology)",
+    "1D-CNN",
+    "LAD-ADS (Logical Analysis of Data rule-based ADS)"
+  ],
+  "flAlgorithms": ["Federated Averaging (FedAvg)"],
+  "xaiMethods": ["SHAP (Kernel SHAP with summary impact distribution plots)"],
+  "xaiEvaluation": "Feature attributions evaluated on predicted anomalous test samples at Zone 1 using Kernel SHAP summary plots, revealing top driving features (Slope and R4 for ultrasound sensor breakdowns; IN3, Slope, and IN2 for main tank sensor sabotage) that aligned with physical SCADA system diagnostics.",
+  "metrics": [
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "F1-Score",
+    "Area Under Curve (AUC)",
+    "Bandwidth occupation (KiB/s)",
+    "Model running time (seconds)",
+    "Power consumption (mW)",
+    "CPU usage percentage",
+    "Memory usage percentage"
+  ],
+  "results": "FedeX achieved perfect detection in Zone 1 (1.0 Accuracy, 1.0 Precision, 1.0 Recall, 1.0 F1, 1.0 AUC) and up to 0.9992 F1-score across other zones on SCADA liquid storage, outperforming its centralized version (0.9418 F1). On SWaT, FedeX reached 1.0 Recall and 0.9857 F1-score, surpassing all 14 baseline methods including LAD-ADS (0.914 F1). Model convergence required only 3 communication rounds (7.5 minutes total training time) with peak memory usage of 14 percent on Raspberry Pi 4.",
+  "failureConditions": [
+    "Precision slightly reduced in Zone 4 (0.864) due to false alarms where normal samples were misclassified as anomalous.",
+    "SVDD threshold computation phase causes 100 percent CPU usage spikes on Raspberry Pi 4 edge devices."
+  ],
+  "costEvaluation": "Model training converges in 450 seconds (7.5 minutes) across 3 communication rounds (~150 seconds per round). Uplink bandwidth consumption remains low at ~7 KiB/s during weight transmission. Memory usage remains steady at 14 percent, leaving edge hardware memory available for concurrent tasks.",
+  "limitations": [
+    {
+      "text": "SVDD threshold update process requires 100 percent CPU utilization on Raspberry Pi 4, potentially interrupting other real-time edge services during execution.",
+      "theme": "CPU Spike &amp; Service Interruption"
+    },
+    {
+      "text": "Model parameters transmitted across edge-cloud communication channels are vulnerable to interception or tap-in attacks without network-level encryption.",
+      "theme": "Communication Channel Security"
+    },
+    {
+      "text": "Heterogeneous machine configurations across manufacturing zones can lead to imbalanced client data distributions, inducing bias in the aggregated global model.",
+      "theme": "Data Heterogeneity &amp; Non-IID Bias"
+    }
+  ],
+  "futureWork": [
+    "Incorporate secure communication protocols and homomorphic encryption to protect edge-cloud parameter transmissions in federated learning.",
+    "Enhance the FedeX framework to handle imbalanced data distributions and heterogeneous zone architectures.",
+    "Explore higher-capacity edge hardware platforms to support real-time dynamic threshold updates."
+  ],
+  "relevance": "Highly relevant for privacy-preserving industrial control system security, edge computing deployment, automated decision thresholding via VAE-SVDD, and trustworthy explainable AI in smart manufacturing.",
+  "newIdeas": [
+    "FedeX architecture combining lightweight Variational Autoencoders with Support Vector Data Description dynamic thresholding in a federated learning framework.",
+    "Deploying Kernel SHAP explainability on VAE reconstruction loss anomaly detection models in physical SCADA liquid storage environments."
+  ],
+  "reviewStatus": "Published in IEEE Access, Volume 10, pages 53854-53867 (2022).",
+  "priority": "High",
+  "evidence": [
+    {
+      "item": "Title, authors, venue, DOI, and metadata",
+      "page": "53854",
+      "section": "Header",
+      "ref": "IEEE Access (2022) DOI: 10.1109/ACCESS.2022.3173288"
+    },
+    {
+      "item": "FedeX architecture, FedVAE, and FedVAE-SVDD algorithms",
+      "page": "53857-53860",
+      "section": "Section III. Federated Learning-Based Explainable Anomaly Detection for ICS - FedeX",
+      "ref": "Algorithms 1 &amp; 2, Figures 2, 3, 4, 5"
+    },
+    {
+      "item": "Experimental setup (Raspberry Pi 4 testbed &amp; dataset specifications)",
+      "page": "53860-53861",
+      "section": "Section IV-A &amp; IV-B. ICS Case Study &amp; Experiment Setup",
+      "ref": "Figure 6, Section IV-B"
+    },
+    {
+      "item": "Detection performance &amp; baseline comparison (SCADA &amp; SWaT)",
+      "page": "53861-53863",
+      "section": "Section IV-C1. Detection Capability",
+      "ref": "Tables 2 &amp; 3, Figure 7"
+    },
+    {
+      "item": "XAI evaluation (SHAP summary plots &amp; sensor analysis)",
+      "page": "53863-53864",
+      "section": "Section IV-C2. Explainable AI",
+      "ref": "Figure 8"
+    },
+    {
+      "item": "Edge performance metrics (Bandwidth, CPU, Power, Memory, Runtime)",
+      "page": "53864-53866",
+      "section": "Section IV-C3. Edge Computing Capacity",
+      "ref": "Figures 9, 10, 11, 12, 13"
+    },
+    {
+      "item": "Limitations &amp; Future Directions",
+      "page": "53866-53867",
+      "section": "Section V-B &amp; VI. Limitations and Future Work &amp; Conclusion",
+      "ref": "Section V-B, Section VI"
+    }
+  ]
+}
