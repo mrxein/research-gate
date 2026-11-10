@@ -1,0 +1,171 @@
+{
+  "id": "p009",
+  "title": "Federated Learning With Explainable AI for Malicious Traffic Detection in IoT Networks",
+  "authors": [
+    "Muhammad Ahmad Bilal",
+    "Ihtesham Ul Islam",
+    "Naima Iltaf",
+    "Muhammad Junaid Khan",
+    "M. Jaleed Khan"
+  ],
+  "year": 2025,
+  "venue": "IEEE Access",
+  "doi": "10.1109/ACCESS.2025.3613459",
+  "researchArea": "Cybersecurity, Federated Learning, Explainable AI, IoT Intrusion Detection Systems",
+  "tags": [
+    "Federated Learning",
+    "Explainable AI",
+    "IoT Networks",
+    "Intrusion Detection",
+    "SHAP",
+    "LIME",
+    "FedAvg",
+    "Edge-IIoT",
+    "CIC-IoT2023",
+    "TII-SSRC-23"
+  ],
+  "problem": "Centralizing raw IoT network traffic data for deep learning-based intrusion detection raises serious privacy, bandwidth, and scalability concerns, while black-box deep learning models lack transparency and human-understandable justifications for security analysts.",
+  "motivation": "The explosive growth of connected IoT devices increases vulnerability to large-scale attacks like Mirai botnets and DDoS. An effective intrusion detection system must preserve data privacy and locality through federated learning while offering transparent, instance-level explainability via post-hoc XAI to establish operational trust in security operation centers.",
+  "noveltyAndContributions": [
+    "Proposed a unified FL-XAI framework combining a lightweight multi-layer perceptron deep neural network with SHAP and LIME for malicious traffic detection across distributed IoT networks.",
+    "Integrated KernelSHAP for global and instance-level feature attributions alongside LIME for local surrogate explanations to enhance alert transparency without compromising detection accuracy.",
+    "Rigorously evaluated the system on three recent, comprehensive IoT/IIoT benchmark datasets (Edge-IIoT, CIC-IoT2023, and TII-SSRC-23) under both IID and non-IID client partitioning scenarios.",
+    "Demonstrated near-centralized detection performance with less than 0.5 percent performance gap while maintaining low communication overhead and preserving client data locality."
+  ],
+  "methodology": [
+    "Standardized data preprocessing including data cleaning, feature selection pruning zero-variance and highly correlated attributes, one-hot encoding for categorical variables, port binning, and Min-Max normalization scaling continuous features to range 0 to 1.",
+    "Cost-sensitive loss formulation using weighted cross-entropy and focal loss with SMOTE restricted to extreme minority classes to address severe dataset class imbalance.",
+    "Lightweight multi-layer perceptron neural network architecture with 2 hidden layers (128 and 64 neurons with ReLU activation and 20 percent dropout) trained using Adam optimizer.",
+    "Horizontal federated learning using Federated Averaging across 4 to 5 client nodes simulating IoT edge devices.",
+    "Post-hoc explainability module applying KernelSHAP with 100 benign background samples and LIME with 500 perturbations per instance for alert interpretation."
+  ],
+  "keyAssumptions": [
+    "IoT edge nodes can train lightweight neural network models locally and share model updates with a central server without transmitting raw network traffic logs.",
+    "The central aggregator server possesses sufficient computational resources to execute SHAP and LIME post-hoc explanation modules on global model predictions.",
+    "Feature schemas and label taxonomies are standardized per dataset across federated clients in a horizontal federated learning setting."
+  ],
+  "datasets": [
+    "Edge-IIoT (2022) dataset with 40 selected features across DoS/DDoS, Information Gathering, MITM, Injection, and Malware attack categories.",
+    "CIC-IoT2023 dataset with 45 selected features spanning 33 attack types organized into 7 families (DDoS, DoS, Reconnaissance, Mirai, Spoofing, Web, BruteForce).",
+    "TII-SSRC-23 (2023) dataset with 52 selected features aggregated into 5 broad attack categories across industrial and smart IoT devices."
+  ],
+  "partition": [
+    "80:20 train and test split per dataset.",
+    "Partitioned across 4 to 5 federated clients simulating device-type or attack-family non-IID skewed distributions as well as IID baseline configurations."
+  ],
+  "numClients": [
+    "5 clients for Edge-IIoT partitioned by device type",
+    "4 clients for CIC-IoT2023 partitioned by attack family",
+    "5 clients for TII-SSRC-23 partitioned by device category"
+  ],
+  "experimentalSetup": [
+    "Central server: Intel Core i7 CPU (8 cores), 16 GB RAM; Google Colaboratory GPU (Tesla K80, 12 GB RAM) for large workloads.",
+    "Software: Python, TensorFlow 2.x/Keras, custom FedAvg loop, SHAP library (v0.41), LIME package, scikit-learn, Pandas, NumPy.",
+    "Hyperparameters: Adam optimizer with initial learning rate 0.001, batch size 64, 1 to 2 local epochs per round, early stopping with patience of 5 rounds.",
+    "Loss function: Cost-sensitive weighted cross-entropy and focal loss (focusing parameter gamma=2, balance parameter beta)."
+  ],
+  "baselines": [
+    "Centralized DNN model trained on all dataset samples",
+    "Ferrag et al. centralized XGBoost on Edge-IIoT",
+    "DIoT (Nguyen et al.) federated anomaly detection",
+    "DeepFed (Li et al.) federated deep learning for industrial IoT",
+    "Centralized models by Hasan et al., Alshehri et al., and Saadouni et al. (Edge-IIoT)",
+    "Centralized Transformer (Tseng et al.), Random Forest (Elkhadir and Begdouri), and LSTM (Jony and Arnob) (CIC-IoT2023)",
+    "Centralized XGBoost (Herzalla et al.) and GAN-based method (Rani et al.) (TII-SSRC-23)"
+  ],
+  "flAlgorithms": ["Federated Averaging (FedAvg)"],
+  "xaiMethods": [
+    "SHAP (KernelSHAP)",
+    "LIME (Local Interpretable Model-Agnostic Explanations)"
+  ],
+  "xaiEvaluation": "Evaluated feature attributions using mean absolute SHAP values normalized by maximum to generate global rankings, paired with instance-level LIME local contribution plots on 10 top features across held-out test samples to verify consistency between global model behavior and local alert rationales.",
+  "metrics": [
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "F1-Score (binary and macro-averaged)",
+    "False Positive Rate",
+    "False Negative Rate",
+    "Confusion Matrix",
+    "Mean normalized SHAP value",
+    "LIME contribution score"
+  ],
+  "results": "The FL-XAI model achieved binary classification accuracies of 99.3% (Edge-IIoT), 99.5% (CIC-IoT2023), and 99.0% (TII-SSRC-23), with corresponding multi-class accuracies of 97.2%, 98.0%, and 96.5%. The performance gap between federated and centralized models was negligible (&lt;0.5% F1-score difference). SHAP and LIME provided consistent, domain-aligned feature attributions (e.g., packet rates for DDoS, protocol function codes for industrial IoT) without sacrificing detection quality.",
+  "failureConditions": [
+    "Minor inter-class confusion observed in multi-class Edge-IIoT between DoS/DDoS and Injection attacks due to overlapping traffic flow characteristics.",
+    "Stealthy Man-in-the-Middle (MITM) attacks occasionally misclassified as benign or injection due to subtle TCP and ARP behavior changes.",
+    "LIME local explanations occasionally missed port-related behaviors in MITM traffic, requiring feature discretization."
+  ],
+  "costEvaluation": "Total communication overhead per client over 50 rounds was below 30 MB due to lightweight MLP parameters (13.8k to 15.3k float32 weights). Inference memory usage stayed under a few megabytes. SHAP computations took approximately 0.2 seconds per instance and LIME approximately 0.5 seconds on CPU, suitable for post-alert security analyst interpretation.",
+  "limitations": [
+    {
+      "text": "Computing SHAP and LIME explanations incurs computational latency on CPU (0.2s and 0.5s per instance), making real-time inline XAI generation per packet challenging.",
+      "theme": "XAI Computational Latency"
+    },
+    {
+      "text": "Post-hoc explanations reflect model behavior but do not directly influence or correct classification decisions during runtime.",
+      "theme": "Post-hoc Interpretation Scope"
+    },
+    {
+      "text": "Evaluations relied on standard FedAvg which may experience performance degradation under extreme non-IID client distributions without proximal or Byzantine-robust mechanisms.",
+      "theme": "Federated Aggregation Robustness"
+    }
+  ],
+  "futureWork": [
+    "Develop communication-efficient federated learning strategies and adaptive client selection algorithms.",
+    "Implement client-level personalization to better accommodate extreme non-IID IoT traffic environments.",
+    "Integrate real-time feedback loops from security analysts to dynamically refine detection models.",
+    "Explore advanced Byzantine-robust aggregation methods against malicious client updates."
+  ],
+  "relevance": "Highly relevant for privacy-preserving IoT cybersecurity, edge-cloud intrusion detection, trustworthy explainable AI, and multi-dataset federated learning benchmarks.",
+  "newIdeas": [
+    "Combining FedAvg horizontal federated learning with post-hoc KernelSHAP and LIME explanation modules for multi-dataset IoT intrusion detection.",
+    "Pairing normalized global SHAP rankings with instance-level LIME local contribution bars over identical top-10 feature subsets to cross-verify alert explanation consistency."
+  ],
+  "reviewStatus": "Published in IEEE Access, Volume 13, pages 173368-173383 (2025).",
+  "priority": "High",
+  "evidence": [
+    {
+      "item": "Title, authors, venue, DOI, and abstract",
+      "page": "1-2",
+      "section": "Header &amp; Abstract",
+      "ref": "IEEE Access (2025) DOI: 10.1109/ACCESS.2025.3613459"
+    },
+    {
+      "item": "Preprocessing, feature selection, and cost-sensitive class balancing",
+      "page": "4-5",
+      "section": "Section III-B. Data Preprocessing and Feature Representation",
+      "ref": "Section III-B, Figure 4, Equation 1"
+    },
+    {
+      "item": "MLP Architecture &amp; Federated Setup (FedAvg)",
+      "page": "5-6",
+      "section": "Section III-C. ID Model &amp; Section III-D. Federated Training Algorithm",
+      "ref": "Table 1, Algorithm 1, Equation 2"
+    },
+    {
+      "item": "Dataset details &amp; client non-IID partitioning",
+      "page": "7-8",
+      "section": "Section IV-A. Datasets &amp; Section IV-B. Experimental Platform",
+      "ref": "Tables 2, 3, 4, 5, 6"
+    },
+    {
+      "item": "Experimental performance &amp; baseline comparison",
+      "page": "9-12",
+      "section": "Section V-A. Overall Detection Performance &amp; Section V-D. Comparison with Existing Approaches",
+      "ref": "Tables 7, 8, 9, 10, 11, 12, Figures 5, 6, 7, 8"
+    },
+    {
+      "item": "Explainability analysis (SHAP &amp; LIME)",
+      "page": "12-13",
+      "section": "Section III-E &amp; Section V-C. Explainability Assessment",
+      "ref": "Figure 9, Equations 3 &amp; 4"
+    },
+    {
+      "item": "Limitations &amp; Future Directions",
+      "page": "13-14",
+      "section": "Section VI. Conclusion",
+      "ref": "Section VI"
+    }
+  ]
+}
