@@ -61,10 +61,10 @@ export function WorkspaceProvider({ papers, children }: { papers: Paper[]; child
 
     try {
       const w = await loadWorkspace();
-
       if (!cancelled) {
-        prev.current = w;
-        setWs(w);
+        const merged = { ...empty, ...w };
+        prev.current = merged;
+        setWs(merged);
         setReady(true);
       }
     } catch (error) {
