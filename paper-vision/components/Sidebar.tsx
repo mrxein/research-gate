@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import AuthPanel from "@/components/AuthPanel";
+import Image from "next/image";
 const nav = [
   ["/", "Dashboard"],
   ["/papers", "Papers"],
@@ -29,7 +30,7 @@ export default function Sidebar() {
   return (
     <aside className="flex shrink-0 flex-row items-center gap-1 overflow-x-auto border-b border-slate-200 bg-white p-2 dark:border-slate-700/60 dark:bg-panel md:sticky md:top-0 md:h-screen md:w-56 md:flex-col md:items-stretch md:overflow-visible md:border-b-0 md:border-r md:p-4">
       <div className="hidden px-2 pb-4 font-serif text-lg font-semibold md:block">
-        Paper Vision
+        <Image src={`${dark ? "/logo-dark-mode.png" : "/logo-light-mode.png"}`} alt="Paper Vision" width={100} height={100} />
       </div>
       {nav.map(([h, l]) => {
         const on = h === "/" ? path === "/" : path.startsWith(h);
