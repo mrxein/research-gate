@@ -1,0 +1,134 @@
+{
+  "id": "p016",
+  "title": "A Survey of DDoS Attack and Defense Technologies in Multiaccess Edge Computing",
+  "authors": [
+    "Yong Ma",
+    "Long Liu",
+    "Zhiquan Liu",
+    "Fagen Li",
+    "Qilin Xie",
+    "Kaiwei Chen",
+    "Chenyang Lv",
+    "Ying He",
+    "Fan Li"
+  ],
+  "year": 2025,
+  "venue": "IEEE Internet of Things Journal",
+  "doi": "10.1109/JIOT.2024.3490897",
+  "researchArea": "Multiaccess Edge Computing (MEC) Security / DDoS Attack & Defense Survey",
+  "tags": [
+    "MEC Security",
+    "DDoS Attacks",
+    "Edge Computing",
+    "SDN Security",
+    "Federated Learning",
+    "Blockchain",
+    "Survey",
+    "Multiaccess Edge Computing"
+  ],
+  "problem": "Lack of systematic, architecture-centric surveys evaluating DDoS attack variants (such as Link Flood, Flow-Table Overflow, OpenFlow Agent, and Resource Exhaustion attacks) and defense mechanisms specifically tailored for resource-constrained, multi-tenant Multiaccess Edge Computing (MEC) networks.",
+  "motivation": "Traditional cloud-centric DDoS defense mechanisms introduce high latency, consume network bandwidth, and fail to address unique edge vulnerabilities (e.g., virtualization deficiencies, coarse-grained access control, and low-rate SDN attacks). A comprehensive synthesis is needed to guide lightweight, adaptive defense design across cloud, edge server, and edge device layers.",
+  "noveltyAndContributions": [
+    "Structured a 3-layer MEC architecture model (Cloud Server Layer, Edge Server Layer, Edge Device Layer) and mapped specific attack surfaces across layers.",
+    "Categorized DDoS threats into traditional flooding/slow-request attacks vs. MEC architecture-specific attacks (SDN-targeted LFA/FTO/OpenFlow Agent and server-targeted Resource Exhaustion/Power/Zero-day attacks).",
+    "Taxonomized edge defense solutions across multiaccess device network methods (Supervised, Reinforcement, Deep/Federated Learning) and architectural mitigation mechanisms (SDN, Blockchain, NFV, Security Slicing).",
+    "Reviewed commercial edge defense case studies (Akamai Kona Site Defender and Cloudflare DDoS Protection) and identified critical open research directions."
+  ],
+  "methodology": [
+    "Conducting a comprehensive literature survey, synthesizing, taxonomizing, and systematically comparing over 120 state-of-the-art research papers and industry reports on MEC DDoS security.",
+    "Comparing survey taxonomy against prior literature reviews to highlight unique focus areas on lightweight edge server constraints and SDN/MEC integration.",
+    "Tabulating comparative analyses of attack variants (by targeted layer, rate, operational impact) and defense mechanisms (by dataset, detection method, application domain, and limitations)."
+  ],
+  "keyAssumptions": [
+    "MEC networks require defense solutions that operate close to network endpoints (at the Edge Server Layer) to maintain low-latency responsiveness for legitimate traffic while preventing botnet spread."
+  ],
+  "datasets": [
+    "Surveyed datasets include: CICDDoS2019, BoT-IoT, CIC-IDS2017, UNSW-NB15, IoT-23, 5G-NIDD, VDoS, InSDN, RT_IoT2022, KDDCUP99, UNB ISCX, Fog IIoT Factory."
+  ],
+  "partition": [],
+  "numClients": [],
+  "experimentalSetup": [
+    "Literature survey and analytical comparative synthesis (no standalone empirical benchmark setup)."
+  ],
+  "baselines": [
+    "Prior survey papers: Zargar et al. (2013), Xiao et al. (2019), Zeyu et al. (2020), Ranaweera et al. (2021), Gyamfi & Jurcut (2022), Uddin et al. (2024)."
+  ],
+  "flAlgorithms": [
+    "Surveyed FL approaches include: FedAvg (weighted parameter aggregation), Collaborative Federated Learning (CFL), Zero-X (Blockchain + Open-Set Recognition FL), and FLEAM (GRU-based FL for IIoT)."
+  ],
+  "xaiMethods": [],
+  "xaiEvaluation": "Identified the black-box nature and lack of interpretability in deep learning defense models as a key vulnerability, emphasizing the need for transparent decision-making in edge network security.",
+  "metrics": [
+    "Evaluated metrics across surveyed papers: Detection Rate (DR), False Positive Rate (FPR) / False Alarm Rate (FAR), Accuracy, Memory / CPU Overhead, Latency / Response Time (ms), Energy / Power Consumption, Throughput."
+  ],
+  "results": "Synthesized and compared over 60 defense frameworks across traditional and edge-specific categories. Highlighted that combining lightweight traditional statistical methods (e.g., entropy) with adaptive AI (RL/FL) and SDN/P4 data-plane offloading offers the most viable path toward real-time edge protection.",
+  "failureConditions": [
+    "Centralized SDN controllers suffer from CPU exhaustion and flow-table saturation when targeted by low-rate FTO or OpenFlow Agent spoofing attacks.",
+    "Pure machine learning/deep learning edge models degrade under zero-day attacks or when trained on outdated, static datasets lacking IoT device diversity."
+  ],
+  "costEvaluation": "Analyzed computational, latency, memory, and energy costs associated with running defense models directly on resource-constrained edge servers vs. offloading detection tasks to the cloud or P4 switches.",
+  "limitations": [
+    {
+      "text": "Most surveyed machine learning defense methods rely on outdated datasets (KDDCUP99, UNSW-NB15) that lack multiaccess edge device diversity and modern Layer-2/Layer-3 IoT attack vectors.",
+      "theme": "Dataset Diversity & Realism Deficit"
+    },
+    {
+      "text": "Current defense frameworks lack standardized service management mechanisms for handling user access offloading, idle resource sharing, or server failover when an edge node is overwhelmed.",
+      "theme": "Lack of MEC Service Management Standardization"
+    },
+    {
+      "text": "Advanced decentralized mechanisms (blockchain consensus, proxy re-encryption) introduce high computational overhead and encryption latency, limiting real-time deployment on edge hardware.",
+      "theme": "Computational Latency of Blockchain & Crypto Controls"
+    }
+  ],
+  "futureWork": [
+    "Develop multi-agent reinforcement learning (MARL) for collaborative, low-overhead edge server defense.",
+    "Advance Federated Learning (FL) frameworks to resolve data non-IIDness and security budget disparities across edge nodes.",
+    "Implement P4 data-plane programming to offload complex DDoS filtering policies directly onto switch hardware.",
+    "Integrate Security Slicing (5G/ZSM) to isolate malicious traffic streams without disrupting critical edge services."
+  ],
+  "relevance": "Provides moderate/supporting relevance to your thesis by surveying Federated Learning (FL), SDN controllers, and Multiaccess Edge Computing (MEC) defense architectures. Crucially, it highlights ARP Spoofing (D-ARPSpoof) and Layer-2/Layer-3 edge threat vectors alongside OpenFlow domain limitations.",
+  "newIdeas": [
+    "Utilize this survey's taxonomic distinction between SDN control-plane vs. data-plane attacks (LFA, FTO) to evaluate Explainable Federated Learning (XAI + FL) for Layer-2 intrusion detection across heterogeneous edge segments."
+  ],
+  "reviewStatus": "Reviewed",
+  "priority": "Medium",
+  "evidence": [
+    {
+      "item": "Title, authors, DOI (10.1109/JIOT.2024.3490897), and journal venue",
+      "page": "Page 1 (1429)",
+      "section": "Header",
+      "ref": "Passages 1 & 9"
+    },
+    {
+      "item": "MEC 3-layer physical architecture (CSL, ESL, EDL) and security challenges",
+      "page": "Pages 2–4 (1430–1432)",
+      "section": "II. MEC Network Overview",
+      "ref": "Figures 1, 2 & Passages 16–24"
+    },
+    {
+      "item": "Classification of DDoS attacks (Traditional vs. MEC Architecture-Specific: LFA, FTO, OpenFlow Agent, Power, Zero-day)",
+      "page": "Pages 4–8 (1432–1436)",
+      "section": "III. DDoS Attack Techniques in MEC Networks",
+      "ref": "Figures 3–9 & Table II"
+    },
+    {
+      "item": "DDoS defense taxonomy (ML, FL, SDN, Blockchain, NFV, Entropy, D-ARPSpoof)",
+      "page": "Pages 8–18 (1436–1446)",
+      "section": "IV. DDoS Defense Techniques in MEC Networks",
+      "ref": "Figures 10–14 & Tables III, IV"
+    },
+    {
+      "item": "Commercial case studies (Akamai Kona Site Defender & Cloudflare DDoS Protection)",
+      "page": "Pages 18–19 (1446–1447)",
+      "section": "V. Example of DDoS Defense Application in MEC Networks",
+      "ref": "Passages 114–120"
+    },
+    {
+      "item": "Current problems and future research directions (FL, MARL, Security Slicing, P4/SDN)",
+      "page": "Pages 19–21 (1447–1449)",
+      "section": "VI. Current Problems and Future Directions",
+      "ref": "Passages 121–128"
+    }
+  ]
+}
