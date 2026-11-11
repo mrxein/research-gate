@@ -35,16 +35,54 @@ export function WorkspaceProvider({ papers, children }: { papers: Paper[]; child
 
   // 2. Load from Supabase when signed in, otherwise from localStorage
   useEffect(() => {
+  let cancelled = false;
+
+  async function initialize() {
     if (!user) {
       try {
         const s = localStorage.getItem("ws");
-        setWs(s ? { ...empty, ...JSON.parse(s) } : empty);
-      } catch {}
-      setReady(false);
+        const parsed = s ? JSON.parse(s) : {};
+
+        if (!cancelled) {
+          setWs({ ...empty, ...parsed });
+          setReady(true);
+        }
+      } catch (error) {
+        console.error("Failed to load local workspace:", error);
+
+        if (!cancelled) {
+          setWs(empty);
+          setReady(true);
+        }
+      }
+
       return;
     }
-    loadWorkspace().then(w => { prev.current = w; setWs(w); setReady(true); });
-  }, [user]);
+
+    try {
+      const w = await loadWorkspace();
+
+      if (!cancelled) {
+        prev.current = w;
+        setWs(w);
+        setReady(true);
+      }
+    } catch (error) {
+      console.error("Failed to load Supabase workspace:", error);
+
+      if (!cancelled) {
+        setWs(empty);
+        setReady(true);
+      }
+    }
+  }
+
+  initialize();
+
+  return () => {
+    cancelled = true;
+  };
+}, [user]);
 
   // 3. Save: debounced diff to Supabase (signed in) or localStorage (signed out)
   useEffect(() => {
