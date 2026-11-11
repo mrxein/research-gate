@@ -35,6 +35,11 @@ export default function PaperPage() {
   const p = papers.find((x) => x.id === id);
   const [tag, setTag] = useState("");
   const [ev, setEv] = useState({ page: "", section: "", ref: "", quote: "" });
+
+  const authors = p?.authors ?? [];
+  const builtinTags = p?.tags ?? [];
+  const limitations = p?.limitations ?? [];
+
   if (!p)
     return (
       <Page
@@ -48,7 +53,7 @@ export default function PaperPage() {
   return (
     <Page
       title={p.title}
-      sub={`${p.authors.join(", ")} (${p.year}), ${p.venue}`}
+      sub={`${authors.join(", ")} (${p.year}), ${p.venue}`}
       actions={<StatusBadge s={statusOf(p.id)} />}
     >
       <div className="grid gap-4 lg:grid-cols-3">
@@ -121,9 +126,9 @@ export default function PaperPage() {
             </Sec>
           )}
           <Sec t="Limitations">
-            {(p.limitations ?? []).length > 0 ? (
+            {(limitations ?? []).length > 0 ? (
               <ul className="space-y-2 text-sm">
-                {p.limitations.map((l, idx) => (
+                {limitations.map((l, idx) => (
                   <li key={idx} className="flex flex-col gap-1">
                     <span>{l.text}</span>
                     <span>
@@ -223,7 +228,7 @@ export default function PaperPage() {
             </label>
             <div className="mt-3 flex flex-wrap gap-1">
               {[
-                ...p.tags.map((t) => [t, false] as const),
+                ...builtinTags.map((t) => [t, false] as const),
                 ...tags.map((t) => [t, true] as const),
               ].map(([t, mine]) => (
                 <button
