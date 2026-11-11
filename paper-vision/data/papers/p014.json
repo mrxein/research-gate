@@ -1,0 +1,136 @@
+{
+  "id": "p014",
+  "title": "Protocol-Agnostic and Packet-Based Intrusion Detection Using a Multi-Layer Deep-Learning Architecture at the Network Edge",
+  "authors": [
+    "Rodolphe Picot",
+    "Felipe Gohring de Magalhães",
+    "Ahmad Shahnejat Bushehri",
+    "Maroua Ben Atti",
+    "Gabriela Nicolescu",
+    "Alejandro Quintero"
+  ],
+  "year": 2025,
+  "venue": "IEEE Access",
+  "doi": "10.1109/ACCESS.2025.3555201",
+  "researchArea": "Edge Network Intrusion Detection / Protocol-Agnostic Packet Preprocessing",
+  "tags": [
+    "Layered IDS",
+    "OSI Model Alignment",
+    "Edge Computing",
+    "CIC-IDS2017 Dataset",
+    "Protocol-Agnostic Detection",
+    "Wireshark Shadow Features",
+    "Centralized Edge Training"
+  ],
+  "problem": "Traditional intrusion detection systems either destroy protocol structure through lossy transformations (e.g., converting packets to images or NLP/Word2Vec embeddings) or suffer from high computational overhead and data sparsity when processing unaligned raw fields across heterogeneous protocols on resource-constrained edge devices.",
+  "motivation": "Edge computing devices face severe CPU, memory, and battery constraints that prevent running complex deep learning models (such as CNNs or RNNs) or resource-heavy decentralized edge training workflows. Aligning the neural network structure directly with the hierarchical OSI model preserves semantic layer relationships while dramatically reducing computational overhead.",
+  "noveltyAndContributions": [
+    "Designed a dynamic multi-layer deep learning architecture where individual neural networks (NNs) are assigned to specific network protocols (e.g., ETH, IP, TCP, HTTP) and protocol combinations, closely reflecting OSI layer hierarchy.",
+    "Proposed a custom, protocol-agnostic Wireshark-driven preprocessing pipeline featuring pattern-matched type inference, categorical heuristics, and 'shadow features' to represent absent protocol fields without arbitrary value imputation.",
+    "Demonstrated a lightweight centralized edge training strategy where edge nodes selectively deploy only the sub-networks relevant to their local traffic patterns, optimizing power consumption."
+  ],
+  "methodology": [
+    "Grouped raw PCAP network traffic from the CIC-IDS2017 dataset by protocol combinations (e.g., ETH/IP/TCP, ETH/IP/TCP/HTTP).",
+    "Extracted packet fields using Wireshark pattern matching to infer custom data types (Long, Address, Float, Label, String, Date, Boolean) and generated shadow feature indicators for conditionally missing fields.",
+    "Passed protocol-specific attributes into dedicated protocol NNs (Linear + ReLU + BatchNorm1D), concatenated their output vectors into a fixed-width bridge layer (width = 90), and fed them into combination-specific NNs.",
+    "Trained the architecture using Binary Cross-Entropy loss and the Adam optimizer over 150 epochs, automatically tuned via Optuna on Compute Canada GPU clusters."
+  ],
+  "keyAssumptions": [
+    "Network packets strictly follow hierarchical OSI layering, allowing individual protocol fields to be processed independently before sub-network concatenation.",
+    "Edge devices can periodically receive pre-trained sub-model updates from a central server during maintenance or battery recharge cycles, eliminating local edge training overhead."
+  ],
+  "datasets": [
+    "CIC-IDS2017 Dataset (62,029 raw packet subset covering SSH-Patator, FTP-Patator, DoS, Web Attacks, Botnet, DDoS, and Normal traffic)"
+  ],
+  "partition": [],
+  "numClients": [],
+  "experimentalSetup": [
+    "Trained on Compute Canada infrastructure using NVIDIA P100 GPUs with a PostgreSQL database tracking multi-objective trials via Optuna.",
+    "80/20 train/test data split evaluated over 150 training epochs with a batch size of 50.",
+    "Optimal Hyperparameters: Categorical heuristic = 0.05, Minimum feature percentage = 0.1, Bridge layer width = 90, Adam learning rate = 7.494e-6 (beta1 = 0.6, beta2 = 0.95)."
+  ],
+  "baselines": [
+    "Faker & Dogdu 2019 (Accuracy: 99.34%, F1: 99.38%)",
+    "Jose & Jose 2023 (Accuracy: 99.60%, F1: 99.62%)",
+    "Agrafiotis et al. 2022 (Accuracy: 99.99%)",
+    "Khan et al. 2021 (Accuracy: 98.61%, F1: 98.09%)",
+    "Halbouni et al. 2022 (Accuracy: 99.99%, F1: 99.90%)"
+  ],
+  "flAlgorithms": [],
+  "xaiMethods": [],
+  "xaiEvaluation": "None (The study focuses on structural OSI layer alignment and Wireshark feature type mapping rather than explicit post-hoc XAI methods like SHAP or LIME).",
+  "metrics": [
+    "Accuracy (99.99%)",
+    "Precision (99.99%)",
+    "Recall (99.99%)",
+    "F1-Score (99.99%)"
+  ],
+  "results": "Achieved 99.99% across overall Accuracy, F1-Score, Precision, and Recall on the CIC-IDS2017 dataset, outperforming baseline models while significantly reducing model parameter size and packet representation overhead.",
+  "failureConditions": [
+    "Step-like learning variations during hyperparameter optimization caused by individual protocol sub-networks independently reaching local minima before the global combination network converges."
+  ],
+  "costEvaluation": "Decoupling protocol NNs and employing centralized server training reduces edge device battery and computational consumption; edge devices only host and run inference on sub-networks relevant to their specific operational traffic.",
+  "limitations": [
+    {
+      "text": "The evaluation relies strictly on a centralized server training paradigm rather than a federated or distributed edge learning setup.",
+      "theme": "Absence of Federated Learning"
+    },
+    {
+      "text": "The model has not yet been benchmarked against Adversarial Machine Learning (AML) evasion attacks or unlabeled/zero-day threat environments.",
+      "theme": "Adversarial Robustness & Zero-Day Threat Vulnerability"
+    },
+    {
+      "text": "Evaluated on an extracted subset (62,029 packets) of CIC-IDS2017 rather than real-world edge IoT topologies or live multi-segment network streams.",
+      "theme": "Dataset Scale & Real-World Topology Validation"
+    }
+  ],
+  "futureWork": [
+    "Explore model compression techniques (pruning and quantization) for resource-constrained edge deployment.",
+    "Incorporate adversarial training and unsupervised learning to detect unknown, zero-day attacks.",
+    "Integrate intrusion explanation methods (XAI) and benchmark real-time inference latency and memory footprints on edge hardware."
+  ],
+  "relevance": "Directly relevant to your thesis's Layered Intrusion Detection and Heterogeneous Network Segments pillars, providing an OSI-aligned packet parsing framework and demonstrating protocol-agnostic edge sub-network deployment.",
+  "newIdeas": [
+    "Adapt this paper's OSI-aligned modular sub-network architecture into a Federated Learning setup with SHAP feature explainability to evaluate Layer-2 IDS across heterogeneous network segments."
+  ],
+  "reviewStatus": "Reviewed",
+  "priority": "High",
+  "evidence": [
+    {
+      "item": "Title, authors, publication date, DOI (10.1109/ACCESS.2025.3555201)",
+      "page": "Page 1 (57867)",
+      "section": "Header",
+      "ref": "Passage 1"
+    },
+    {
+      "item": "Multi-layer OSI-aligned DL architecture & dynamic sub-network selection",
+      "page": "Pages 4–5 (57870–57871)",
+      "section": "III. Model",
+      "ref": "Figures 1, 2 & Algorithm 1"
+    },
+    {
+      "item": "Wireshark preprocessing pipeline, pattern matching, & shadow feature generation",
+      "page": "Pages 5–6 (57871–57872)",
+      "section": "IV-B. Preprocessing Method for Network Packet Data",
+      "ref": "Figures 3, 4 & Tables 3, 4"
+    },
+    {
+      "item": "Dataset extraction (CIC-IDS2017, 62,029 packets) & Optuna setup on Compute Canada P100 GPUs",
+      "page": "Pages 5–7 (57871–57873)",
+      "section": "IV-A & V. Results & Discussion",
+      "ref": "Tables 2, 5 & Passage 37"
+    },
+    {
+      "item": "Performance results (99.99% metrics) & comparative baseline analysis",
+      "page": "Pages 7–8 (57873–57874)",
+      "section": "V. Results & Discussion",
+      "ref": "Table 8 & Figure 6"
+    },
+    {
+      "item": "Limitations, future research directions, & XAI/adversarial training roadmap",
+      "page": "Page 8 (57874)",
+      "section": "VI. Conclusion",
+      "ref": "Passages 41–42"
+    }
+  ]
+}
