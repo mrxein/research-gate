@@ -32,7 +32,7 @@ const List = ({
 export default function PaperPage() {
   const { id } = useParams<{ id: string }>();
   const { papers, ws, update, statusOf } = useWorkspace();
-  const p = papers.find((x) => x.id === id);
+  const p = papers.find((x) => String(x.id) === decodeURIComponent(id));
   const [tag, setTag] = useState("");
   const [ev, setEv] = useState({ page: "", section: "", ref: "", quote: "" });
 

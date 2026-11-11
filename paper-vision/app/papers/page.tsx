@@ -90,7 +90,7 @@ export default function Papers() {
         {list.map((p) => (
           <Link
             key={p.id}
-            href={`/papers/${p.id}`}
+            href={`/papers/${encodeURIComponent(String(p.id))}`}
             className="card transition hover:border-tide"
           >
             <div className="flex items-start justify-between gap-3">
