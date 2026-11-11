@@ -40,6 +40,8 @@ export default function PaperPage() {
   const builtinTags = p?.tags ?? [];
   const limitations = p?.limitations ?? [];
 
+  console.log("papers:", papers.length, "id:", id, papers.map(x => x.id));
+
   if (!p)
     return (
       <Page
