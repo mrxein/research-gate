@@ -1,0 +1,142 @@
+{
+  "id": "p012",
+  "title": "Federated Learning Framework Based on Distributed Storage and Diffusion Model for Intrusion Detection on IoT Networks",
+  "authors": [
+    "Ricardo Manzano",
+    "Marzia Zaman",
+    "Darshana Upadhyay",
+    "Nishith Goel",
+    "Srinivas Sampalli"
+  ],
+  "year": 2025,
+  "venue": "IEEE Access",
+  "doi": "10.1109/ACCESS.2025.3565409",
+  "researchArea": "Federated Learning for IoT Intrusion Detection / Decentralized Storage &amp; Data Augmentation",
+  "tags": [
+    "Federated Learning",
+    "IoT Intrusion Detection",
+    "Diffusion Model",
+    "Tab-DDPM",
+    "Ethereum SWARM",
+    "P2P Distributed Storage",
+    "BoT-IoT Dataset",
+    "Non-IID"
+  ],
+  "problem": "IoT intrusion detection frameworks face severe privacy risks from transmitting raw data [2], single-point-of-failure vulnerabilities in central coordinators [3], and degraded detection performance on minority attack classes caused by heavily imbalanced Non-IID traffic datasets [2, 4].",
+  "motivation": "Centralized raw traffic aggregation incurs bandwidth costs and violates privacy regulations like GDPR and CCPA [2, 5]. Standard federated learning lacks cost-effective, decentralized model storage [4, 6], while conventional data augmentation techniques (SMOTE, CT-GAN) either create privacy risks or produce synthetic samples that classifiers easily distinguish from real traffic [7-9].",
+  "noveltyAndContributions": [
+    "Integrated a private off-chain Ethereum SWARM decentralized peer-to-peer storage system to fragment, encrypt (Keccak-256/XOR), and distribute model parameters without incurring Ethereum gas fees [2, 4, 10, 11].",
+    "Incorporated local tabular diffusion models (Tab-DDPM) at each worker node to generate realistic synthetic tabular samples for minority classes (Theft, Normal), stabilizing non-IID FL training [2, 12-14].",
+    "Performed domain-knowledge-driven preprocessing on the BoT-IoT dataset (excluding non-attack ARP traffic and adjusting layer-3 ICMP attributes) and applied Random Forest feature selection to reduce attributes from 43 down to 13 [8, 15-17]."
+  ],
+  "methodology": [
+    "Constructed a 6-node private P2P FL network (1 concatenator node + 5 worker nodes) connected via socket communication over a Local Area Network [18, 19].",
+    "The concatenator node initializes a PyTorch neural network using Xavier uniform initialization, uploads weights to SWARM storage, and broadcasts the UploadFileHash [20].",
+    "Worker nodes download model weights, perform local Tab-DDPM diffusion data generation if minority class sample ratios drop below a 10% threshold, train locally, and re-upload updated model chunks to SWARM [14, 20, 21].",
+    "The concatenator collects all worker UploadFileHashes from SWARM, aggregates model weights using FedAvg, and redistributes the global updated hash key [18, 20, 22]."
+  ],
+  "keyAssumptions": [
+    "Worker nodes operate within a secured Local Area Network (LAN) and participate honestly in private SWARM storage without requiring proof-of-work/stake consensus overhead [10, 18].",
+    "Tabular diffusion models (Tab-DDPM) can effectively learn complex non-linear network feature distributions without generating distinguishable synthetic artifacts [9, 13, 23]."
+  ],
+  "datasets": [
+    "BoT-IoT Dataset (short version, ~3.6M TCP/UDP/ICMP records) [2, 24]",
+    "MNIST Dataset (used for FL architecture benchmark validation) [2, 19]"
+  ],
+  "partition": [
+    "IID split (equal class distribution across 5 worker nodes) [17, 25]",
+    "Non-IID split (excluding 1 attack class per worker node for BoT-IoT; 2 classes excluded per node for MNIST) [25, 26]"
+  ],
+  "numClients": ["5 worker nodes + 1 concatenator node"],
+  "experimentalSetup": [
+    "6 virtual machines hosted on an Intel Xeon Silver 4114 server @ 2.20GHz (1 CPU + 2GB RAM per worker VM; 2 CPUs + 2GB RAM for concatenator VM) [19, 27]",
+    "80/20 train/test data split evaluated over 150/500 training epochs [28-30]",
+    "Custom PyTorch FL pipeline with Tab-DDPM tabular diffusion and private SWARM storage integration [13, 19, 20]"
+  ],
+  "baselines": [
+    "Flower FL framework (F1 macro 0.98 IID / 0.97 Non-IID on MNIST) [31, 32]",
+    "Parallel Processing FL (F1 macro 0.97 on MNIST) [31, 33]",
+    "Centralized &amp; FL IDS benchmarks: Popoola et al. (2022) [12], Dharaneish et al. (2024) [34], Thu Huong et al. (2021) [35], Chu & Lin (2023) [36], Hassam Wasswa et al. (2023) [37]"
+  ],
+  "flAlgorithms": ["FedAvg (Federated Averaging)"],
+  "xaiMethods": [],
+  "xaiEvaluation": "None (The paper focuses on data privacy, decentralized SWARM storage, and diffusion-based tabular data balancing rather than explicit XAI interpretability techniques like SHAP or LIME).",
+  "metrics": [
+    "F1-Score (Primary metric to account for severe class imbalance) [38, 39]",
+    "Precision [39]",
+    "Recall [39]",
+    "Accuracy [29, 39]",
+    "Training Time per Iteration (seconds) [27, 33]",
+    "SWARM Upload/Download Latency (ms) [40]"
+  ],
+  "results": "Achieved an average macro F1-score of 98.3% on the Non-IID short BoT-IoT dataset (99.0% on IID), significantly boosting minority class F1-scores for Theft (99.6%) and Normal traffic (98.8%) [2, 41, 42]. Outperformed baseline Non-IID FL (Popoola et al., 96.9%) by +1.4% overall and +7.4% on Normal events [42].",
+  "failureConditions": [
+    "High virtual machine resource constraints (1 CPU, 2GB RAM) cause elevated execution time per iteration (29.85s vs 0.94s in single-machine processes) and high diffusion sample generation latency (~32s per sample) [27, 43].",
+    "Model aggregation latency at the concatenator node increases when scaling to a large number of participating worker nodes [44]."
+  ],
+  "costEvaluation": "Utilized off-chain data storage via Ethereum SWARM instead of on-chain smart contracts, eliminating Ethereum gas transaction fees while keeping model parameters private [4, 10, 45].",
+  "limitations": [
+    {
+      "text": "Each model upload generates a new hash key; if a node's private key is compromised, unauthorized actors could potentially retrieve model weights and infer sensitive data [46].",
+      "theme": "Key Management & Access Security"
+    },
+    {
+      "text": "Tab-DDPM diffusion data augmentation is computationally intensive (~32 seconds per generated sample on low-spec VMs), presenting deployment challenges for resource-constrained edge devices [43, 47].",
+      "theme": "Computational Overhead of Diffusion"
+    },
+    {
+      "text": "Evaluated on 5 worker nodes in a simulated LAN setting and has not yet been validated across multi-segment WAN deployments or real-world IoT datasets like CIC IoT 2023 [44, 48, 49].",
+      "theme": "Scope & Scale Limitations"
+    }
+  ],
+  "futureWork": [
+    "Implement blockchain-based key management and Ethereum password authentication to secure node access [46, 50].",
+    "Develop a hierarchical federated network architecture tailored for large-scale IoT environments [49].",
+    "Benchmark the framework on additional IoT datasets such as CIC IoT 2023, CICIDS, and ToN-IoT [48].",
+    "Compare diffusion models against lightweight augmentation algorithms (SMOTE, ADASYN) on resource-constrained devices [47]."
+  ],
+  "relevance": "Highly relevant to the Federated Learning and Heterogeneous IoT Network Segments pillars of your thesis, offering a practical architecture for handling Non-IID data distributions and decentralized model storage. Note that ARP traffic was explicitly excluded because the BoT-IoT dataset lacks Layer-2 attack scenarios [8, 24].",
+  "newIdeas": [
+    "Combine this paper's Tab-DDPM + SWARM P2P FL architecture with Layer-2 intrusion datasets (such as CL2-IDS from p011) and SHAP feature explainability to build an Explainable Layer-2 Federated IDS."
+  ],
+  "reviewStatus": "Reviewed",
+  "priority": "High",
+  "evidence": [
+    {
+      "item": "Paper title, authors, DOI, and publication venue",
+      "page": "Page 1 (79571)",
+      "section": "Header",
+      "ref": "Passages 1 & 2"
+    },
+    {
+      "item": "P2P SWARM distributed storage architecture & FedAvg workflow",
+      "page": "Pages 6–7 (79576–79577)",
+      "section": "III-A & III-B",
+      "ref": "Figure 1, Figure 2, & Algorithm 2"
+    },
+    {
+      "item": "BoT-IoT domain preprocessing & feature reduction to 13 attributes",
+      "page": "Pages 7–10 (79577–79580)",
+      "section": "III-C-1 & III-C-2",
+      "ref": "Tables 2–8 & Figure 3"
+    },
+    {
+      "item": "Tab-DDPM diffusion data augmentation for minority classes",
+      "page": "Pages 10–12 (79580–79582)",
+      "section": "III-C-4",
+      "ref": "Figure 4 & Algorithm 1"
+    },
+    {
+      "item": "Experimental results on BoT-IoT (98.3% F1 Non-IID) and comparative analysis",
+      "page": "Pages 15–18 (79585–79588)",
+      "section": "IV-C & IV-E",
+      "ref": "Tables 12, 13, 14–18, 20 & Figures 7, 8"
+    },
+    {
+      "item": "Limitations and future research directions",
+      "page": "Pages 18–19 (79588–79589)",
+      "section": "VI. Limitations and Future Work",
+      "ref": "Passages 108–111"
+    }
+  ]
+}

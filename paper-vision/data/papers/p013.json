@@ -1,0 +1,159 @@
+{
+  "id": "p013",
+  "title": "Intrusion Detection System Framework for SDN-Based IoT Networks Using Deep Learning Approaches With XAI-Based Feature Selection Techniques and Domain-Constrained Features",
+  "authors": [
+    "Manlaibaatar Tserenkhuu",
+    "Md Delwar Hossain",
+    "Yuzo Taenaka",
+    "Youki Kadobayashi"
+  ],
+  "year": 2025,
+  "venue": "IEEE Access",
+  "doi": "10.1109/ACCESS.2025.3595595",
+  "researchArea": "SDN-Based IoT Intrusion Detection / XAI Feature Selection & Domain-Constrained Features",
+  "tags": [
+    "SDN-Based IoT IDS",
+    "Explainable AI",
+    "SHAP",
+    "LIME",
+    "Random Forest Feature Importance",
+    "Domain-Constrained Features",
+    "OpenFlow",
+    "InSDN Dataset",
+    "X-IIoTID Dataset",
+    "1D-CNN",
+    "LSTM",
+    "MLP"
+  ],
+  "problem": "High computational complexity, excessive memory usage, and degraded multi-class detection accuracy in SDN-based IoT intrusion detection systems caused by unoptimized deep learning hyperparameters and redundant/irrelevant network flow attributes.",
+  "motivation": "While Software-Defined Networking (SDN) offers centralized traffic visibility, standard deep learning models suffer from high feature dimensionality and arbitrary hyperparameter selection. This leads to latency bottlenecks in OpenFlow SDN controllers and increased false alarm rates in resource-constrained IoT infrastructures.",
+  "noveltyAndContributions": [
+    "Proposed OMBE (Optimized ML/DL-Based malicious Event detection), a high-performance IDS framework combining hyperparameter tuning with XAI-driven feature selection for SDN-enabled IoT networks.",
+    "Formulated the concept of 'domain-constrained features' based on OpenFlow Switch Specification v1.5.1 standards (e.g., Flow duration, Packet Count, Byte Count), ensuring essential traffic fields are forcibly retained regardless of statistical importance scores.",
+    "Executed an empirical comparative evaluation of three XAI feature selection methods (SHAP, LIME, RF FI) across MLP, LSTM, and 1D-CNN models under both constrained and unconstrained feature reduction scenarios."
+  ],
+  "methodology": [
+    "Preprocessed the InSDN (343,889 flow instances, 78 features) and X-IIoTID (820,834 instances, 27 features) datasets using standard scaling, categorical encoding, NaN removal, and an 80/20 train/test split.",
+    "Performed hyperparameter tuning across 7 core parameters (layers, optimizer, learning rate, batch size, epoch, activation, loss) to establish 6 baseline deep learning architectures.",
+    "Extracted a 1% stratified sample from each dataset to compute feature importance scores via post-hoc XAI methods (SHAP, LIME, RF FI) using a baseline Random Forest model.",
+    "Constructed feature subsets under two scenarios: Scenario 1 (pure feature score ranking) and Scenario 2 (manual inclusion of missing OpenFlow domain-constrained features).",
+    "Retrained and benchmarked all deep learning models across subsets to measure classification metrics, FAR, FNR, training time reduction, and memory savings."
+  ],
+  "keyAssumptions": [
+    "A 1% stratified dataset sample provides sufficient statistical representation for post-hoc XAI techniques to calculate reliable global feature importance rankings without excessive computational cost.",
+    "OpenFlow switch statistical fields (Duration, Packet Count, Byte Count, Idle Time) represent essential domain-constrained features required to maintain network control context and controller interoperability."
+  ],
+  "datasets": [
+    "InSDN Dataset (343,889 flow records, 8 target classes: DDoS, DoS, Probe, Botnet, Brute Force, Web Attack, U2R, Normal)",
+    "X-IIoTID Dataset (820,834 flow records, 10 target classes: Reconnaissance, Weaponization, Exploitation, Lateral Movement, Command & Control, Exfiltration, Tampering, Crypto Ransomware, RDoS, Normal)"
+  ],
+  "partition": [],
+  "numClients": [],
+  "experimentalSetup": [
+    "High Performance Computing (HPC) server: Dell PowerEdge R740 equipped with 2x Intel Xeon Gold 6230R 26-core CPUs, 256 GB RAM, and an NVIDIA A100 GPU running Ubuntu 22.04 LTS.",
+    "80/20 train/test split ratio.",
+    "Software framework: Python 3.10, PyTorch/TensorFlow, Keras, Scikit-Learn, SHAP, LIME, Pandas, NumPy, Matplotlib."
+  ],
+  "baselines": [
+    "6 Tuned DL Baseline Models (using full feature sets: 78 features for InSDN, 27 for X-IIoTID)",
+    "State-of-the-art benchmarks: Ibrahim et al. 2024 (CNN InSDN 99.3%), Hakami et al. 2025 (LSTM WSN-DS 99.41%), Zainudin et al. 2023 (FL CNN+MLP 95.41%), Disha & Waheed 2022 (DT TON-IoT 99.90%), Yin et al. 2023 (MLP 84.24%), Chen et al. 2024 (CNN 98%)"
+  ],
+  "flAlgorithms": [],
+  "xaiMethods": [
+    "SHAP (SHapley Additive exPlanations)",
+    "LIME (Local Interpretable Model-agnostic Explanations)",
+    "Random Forest Feature Importance (RF FI)"
+  ],
+  "xaiEvaluation": "Compared stability, classification metrics, and memory savings across feature selection methods with vs. without domain constraints. SHAP and RF FI proved to be the most reliable methods, maintaining peak classification accuracy while reducing memory usage by up to 49.4% (InSDN) and 46.4% (X-IIoTID).",
+  "metrics": [
+    "Accuracy",
+    "Loss (Categorical Cross-entropy & KL Divergence)",
+    "Precision",
+    "Recall (Detection Rate / TPR)",
+    "F1-Score",
+    "False Alarm Rate (FAR / FPR)",
+    "False Negative Rate (FNR)",
+    "Training Time Reduction (%)",
+    "Memory Usage Reduction (%)"
+  ],
+  "results": "The 1D-CNN architecture achieved top multi-class accuracy of 99.9% on InSDN (with 39 features via SHAP/RF FI or 62 features with domain constraints) and 98.0% on X-IIoTID (with 14/15 features), outperforming baseline models while reducing feature counts by 50–80% and significantly decreasing memory footprint.",
+  "failureConditions": [
+    "LIME exhibited instability and severe performance drops when feature counts were small (e.g., accuracy dropped to 88.18% with FNR spiking to 11.8% on X-IIoTID at 7 features)."
+  ],
+  "costEvaluation": "Reducing features in InSDN from 78 to 39/62 decreased memory usage by 20.3% to 49.4% and cut training time by up to 6.8%. On X-IIoTID, reducing features from 27 to 14/15 decreased memory usage by up to 46.4%.",
+  "limitations": [
+    {
+      "text": "The evaluation was limited strictly to XAI-based feature selection methods and did not compare results against classic filter (PCC, Chi-Square), wrapper (RFE), or meta-heuristic optimization techniques.",
+      "theme": "Scope of Feature Selection Techniques"
+    },
+    {
+      "text": "Using a 1% stratified sample for SHAP/LIME feature scoring may introduce sampling bias for extreme minority attack classes (e.g., U2R with only 17 total instances in InSDN).",
+      "theme": "Sampling Size & Class Imbalance Bias"
+    },
+    {
+      "text": "The framework operates as a centralized SDN controller module and does not incorporate federated learning or distributed privacy-preserving edge architectures.",
+      "theme": "Centralized Architecture & Absence of FL"
+    }
+  ],
+  "futureWork": [
+    "Conduct comparative evaluations against traditional filter, wrapper, and meta-heuristic feature selection algorithms.",
+    "Develop scalable XAI feature selection methods capable of processing larger data subsets or entire datasets to eliminate sampling bias.",
+    "Test framework robustness against Adversarial Machine Learning (AML) attacks and refine OpenFlow domain-constrained features for multi-dataset generalization."
+  ],
+  "relevance": "Highly relevant to the Explainable AI (XAI) and Heterogeneous SDN/IoT Network Segments pillars of your thesis, providing an OpenFlow domain-constrained feature mapping and demonstrating SHAP feature selection efficacy on SDN flow datasets.",
+  "newIdeas": [
+    "Integrate OMBE's OpenFlow domain-constrained features and SHAP feature selection framework into a Federated Learning architecture across heterogeneous, multi-domain SDN IoT segments."
+  ],
+  "reviewStatus": "Reviewed",
+  "priority": "High",
+  "evidence": [
+    {
+      "item": "Title, authors, DOI (10.1109/ACCESS.2025.3595595), and publication details",
+      "page": "Page 1 (136864)",
+      "section": "Header",
+      "ref": "Passage 1"
+    },
+    {
+      "item": "OMBE framework overview & OpenFlow switch specification v1.5.1 mapping",
+      "page": "Pages 2–6 (136865–136869)",
+      "section": "III. Proposed Intrusion Detection System Framework",
+      "ref": "Figure 1 & Table 4"
+    },
+    {
+      "item": "InSDN & X-IIoTID dataset specifications and preprocessing workflow",
+      "page": "Pages 3–5 (136866–136868)",
+      "section": "III-A & III-B",
+      "ref": "Tables 1, 2, 3"
+    },
+    {
+      "item": "Feature selection subsets across SHAP, LIME, and RF FI with/without domain constraints",
+      "page": "Pages 5–6 (136868–136869)",
+      "section": "III-C. Feature Reduction",
+      "ref": "Tables 5, 6 & Figures 2, 3"
+    },
+    {
+      "item": "Hyperparameter tuning and baseline DL model configurations",
+      "page": "Pages 6–7 (136869–136870)",
+      "section": "III-D. Developing Deep Learning Models",
+      "ref": "Table 8"
+    },
+    {
+      "item": "Experimental setup (Dell PowerEdge R740, A100 GPU) and metric definitions",
+      "page": "Pages 7–8 (136870–136871)",
+      "section": "IV. Experimental Results and Discussion",
+      "ref": "Passage 43 & Section III-E"
+    },
+    {
+      "item": "Multi-class accuracy results (99.9% InSDN, 98% X-IIoTID) & state-of-the-art comparison",
+      "page": "Pages 8–14 (136871–136877)",
+      "section": "IV-B, IV-C, IV-D",
+      "ref": "Tables 9–17 & Figures 4–9"
+    },
+    {
+      "item": "Limitations and future work directions",
+      "page": "Pages 14–15 (136877–136878)",
+      "section": "V. Conclusion and Future Works",
+      "ref": "Passages 63 & 64"
+    }
+  ]
+}
