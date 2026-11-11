@@ -121,7 +121,7 @@ export default function PaperPage() {
             </Sec>
           )}
           <Sec t="Limitations">
-            {p.limitations.length > 0 ? (
+            {(p.limitations ?? []).length > 0 ? (
               <ul className="space-y-2 text-sm">
                 {p.limitations.map((l, idx) => (
                   <li key={idx} className="flex flex-col gap-1">
