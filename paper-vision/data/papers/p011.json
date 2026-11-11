@@ -1,0 +1,118 @@
+{
+  "id": "p011",
+  "title": "Explainable AI supported hybrid deep learning method for layer 2 intrusion detection",
+  "authors": ["Ilhan Firat Kilincer"],
+  "year": 2025,
+  "venue": "Egyptian Informatics Journal",
+  "doi": "10.1016/j.eij.2025.100669",
+  "researchArea": "Layer-2 Network Intrusion Detection / Explainable AI (XAI)",
+  "tags": [
+    "Layer-2 IDS",
+    "CL2-IDS Dataset",
+    "CNN",
+    "Bi-LSTM",
+    "SHAP",
+    "Explainable AI",
+    "Internal Network Security"
+  ],
+  "problem": "Lack of specialized benchmark datasets and intrusion detection frameworks targeting Layer-2 network attacks (e.g., ARP Spoofing, DHCP Starvation, MAC Flooding, STP Root Bridge) occurring within local internal networks.",
+  "motivation": "Existing IDS datasets predominantly focus on upper-layer OSI protocols (Layers 3–7), leaving internal corporate networks vulnerable to undetectable Layer-2 disruptions and unauthorized access.",
+  "noveltyAndContributions": [
+    "Constructed and released the CL2-IDS benchmark dataset containing 49 features across 10 classes (9 Layer-2 attack vectors + normal traffic).",
+    "Proposed a novel hybrid CNN + Bi-LSTM deep learning architecture operating on 3x3x1 grayscale image representations of local network feature vectors.",
+    "Applied SHAP (SHapley Additive exPlanations) to explain feature contributions and decision-making mechanisms across distinct attack classes."
+  ],
+  "methodology": [
+    "Captured network traffic PCAP files across simulated corporate local network attack scenarios using Wireshark and Tshark.",
+    "Extracted a common set of 9 key network features across all attack classes to prevent model overfitting and reduce computational load.",
+    "Normalized tabular features using QuantileTransformer (scaled to 0–255) and reshaped them into 3x3x1 grayscale image samples.",
+    "Passed images through 3 Conv2D layers (64, 128, 256 filters of size 1x1 with ReLU and MaxPooling2D), flattened spatial maps, and fed them into a Bi-LSTM layer (64 cells).",
+    "Classified outputs using a 128-neuron Dense layer with Softmax activation over 10 target classes, trained with the Adam optimizer and categorical cross-entropy loss."
+  ],
+  "keyAssumptions": [
+    "Tabular Layer-2 network traffic features can be effectively modeled as 3x3 grayscale images to leverage combined CNN spatial and Bi-LSTM sequential feature extraction.",
+    "A selected subset of 9 common network features provides sufficient discriminative power across diverse Layer-2 attack vectors."
+  ],
+  "datasets": [
+    "CL2-IDS Dataset (constructed by author, ~100,000 samples, 10 classes)"
+  ],
+  "partition": [],
+  "numClients": [],
+  "experimentalSetup": [
+    "80/20 train/test data split over 50 training epochs",
+    "Python 3.12.4 with Keras, TensorFlow, OpenCV, and Matplotlib",
+    "Hardware platform: 32 GB RAM, 1 TB SSD"
+  ],
+  "baselines": [
+    "SVM (Accuracy: 29.18%)",
+    "Logistic Regression (Accuracy: 17.97%)",
+    "K-NN (Accuracy: 94.75%)"
+  ],
+  "flAlgorithms": [],
+  "xaiMethods": ["SHAP (SHapley Additive exPlanations)"],
+  "xaiEvaluation": "Visualized feature contribution maps (positive/red vs. negative/blue impact) across classes, identifying frame.cap_len and frame.len as critical features for differentiating attack vectors.",
+  "metrics": [
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "F1-Score",
+    "Confusion Matrix",
+    "Loss/Accuracy Epoch Curves"
+  ],
+  "results": "The hybrid CNN + Bi-LSTM model achieved an overall classification accuracy of 95.28% (Precision: 0.95, Recall: 0.95, F1-Score: 0.95). 100% precision was achieved for DoS Smurf, DHCP Starvation, DoS SYN Flood, ARP Spoof, STP Root Bridge, and Rogue DHCP classes.",
+  "failureConditions": [
+    "High attribute similarity in frame length features (frame.cap_len and frame.len) caused misclassifications and transitions among Telnet Brute Force, RDP Brute Force, MAC Flood, and Normal traffic classes."
+  ],
+  "costEvaluation": "Used compact 3x3 image inputs with 1x1 convolutional filters to minimize feature space size, model parameters, and computational complexity.",
+  "limitations": [
+    {
+      "text": "Overlap in packet length attributes led to reduced classification precision for Telnet Brute Force (84%), RDP Brute Force (88%), and MAC Flood (83%) classes.",
+      "theme": "Feature Similarity &amp; Class Transitivity"
+    },
+    {
+      "text": "Dataset generation was conducted on a simplified, single-switch local network topology rather than a multi-segment distributed enterprise deployment.",
+      "theme": "Topology Scope"
+    },
+    {
+      "text": "The paper focuses solely on centralized deep learning and does not incorporate federated learning or distributed client architectures.",
+      "theme": "Absence of Federated Learning"
+    }
+  ],
+  "futureWork": [
+    "Expand network design and topologies to build a broader, multi-segment dataset.",
+    "Incorporate data collected directly from switch hardware using specialized algorithms.",
+    "Develop Layer-2 detection end-user applications and extend SHAP explanations to application-layer attacks."
+  ],
+  "relevance": "Directly relevant to the Layer-2 Intrusion Detection and Explainable AI (XAI) pillars of your thesis subject, providing a dedicated dataset (CL2-IDS) and SHAP evaluation framework.",
+  "newIdeas": [
+    "Adapt the CL2-IDS dataset and CNN + Bi-LSTM + SHAP framework into a Federated Learning architecture across heterogeneous network segments."
+  ],
+  "reviewStatus": "Reviewed",
+  "priority": "High",
+  "evidence": [
+    {
+      "item": "CL2-IDS Dataset creation &amp; 10 class distributions",
+      "page": "Pages 4–5",
+      "section": "Dataset",
+      "ref": "Table 1 &amp; Table 2"
+    },
+    {
+      "item": "Hybrid CNN + Bi-LSTM architecture &amp; parameters",
+      "page": "Pages 6–7",
+      "section": "Proposed method",
+      "ref": "Figure 4 &amp; Table 4"
+    },
+    {
+      "item": "Classification results (95.28% accuracy) &amp; baseline comparison",
+      "page": "Pages 7–8",
+      "section": "Experimental results",
+      "ref": "Table 5 &amp; Table 6"
+    },
+    {
+      "item": "SHAP feature explainability &amp; class transitivity analysis",
+      "page": "Pages 8–9",
+      "section": "Discussion with XAI",
+      "ref": "Figure 7"
+    }
+  ]
+}
