@@ -1,0 +1,17 @@
+import p0 from "./papers/p001.json";
+import p1 from "./papers/p002.json";
+import p2 from "./papers/p003.json";
+import p3 from "./papers/p004.json";
+import p4 from "./papers/p005.json";
+import p5 from "./papers/p006.json";
+import p6 from "./papers/p007.json";
+import p7 from "./papers/p008.json";
+import p8 from "./papers/p009.json";
+import p9 from "./papers/p010.json";
+import p10 from "./papers/p011.json";
+import p11 from "./papers/p012.json";
+import p12 from "./papers/p013.json";
+import p13 from "./papers/p014.json";
+import p14 from "./papers/p015.json";
+import p15 from "./papers/p016.json";
+export default [p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15] as unknown[];
