@@ -1,0 +1,139 @@
+{
+  "id": "p015",
+  "title": "Particle swarm optimization-enhanced machine learning and deep learning techniques for Internet of Things intrusion detection",
+  "authors": ["Mourad Benmalek", "Abdessamed Seddiki"],
+  "year": 2025,
+  "venue": "Data Science and Management",
+  "doi": "10.1016/j.dsm.2025.02.005",
+  "researchArea": "IoT Intrusion Detection / Swarm Optimization & Metaheuristic Feature Selection",
+  "tags": [
+    "RT_IoT2022 Dataset",
+    "Particle Swarm Optimization",
+    "CatBoost",
+    "1D-CNN",
+    "LSTM",
+    "Feature Selection",
+    "Random Forest Wrapper",
+    "ARP Poisoning",
+    "Binary and Multiclass Classification"
+  ],
+  "problem": "High computational overhead, feature redundancy, and degraded detection accuracy in resource-constrained IoT systems when processing high-dimensional real-time traffic across diverse attack patterns.",
+  "motivation": "Traditional IDS methods and outdated datasets (e.g., KDD99, UNSW-NB15) fail to capture modern IoT protocols and attack vectors. Applying wrapper-based PSO metaheuristic feature selection significantly reduces feature dimensionality and runtime while maintaining top-tier classification accuracy across IoT devices.",
+  "noveltyAndContributions": [
+    "Developed a wrapper-based feature selection algorithm combining Particle Swarm Optimization (PSO) with a Random Forest accuracy fitness function to select 44 optimal features from the RT_IoT2022 dataset.",
+    "Executed a comprehensive benchmark comparing six diverse ML/DL classifiers (CatBoost, KNN, 1D-CNN, LSTM, SVM, Naïve Bayes) across both binary and multi-class IoT intrusion detection scenarios.",
+    "Achieved state-of-the-art detection metrics on RT_IoT2022 using CatBoost (99.85% binary accuracy / 99.82% multi-class accuracy), outperforming baseline models such as QAE-f16.",
+    "Demonstrated dramatic execution time reductions via PSO optimization (e.g., accelerating SVM binary training by ~23x, from 342.23s down to 14.65s)."
+  ],
+  "methodology": [
+    "Preprocessed the RT_IoT2022 dataset (123,117 instances) by removing identifier columns, handling missing values, encoding categorical variables via LabelEncoder, and standardizing numerical features.",
+    "Applied a binary vector PSO wrapper where each particle represents a feature subset evaluated against a Random Forest classification fitness function.",
+    "Selected 44 optimal network traffic features using the PSO + RF best global particle position.",
+    "Trained 6 baseline classifiers (KNN k=5, SVM max_iter=10k, CatBoost lr=0.1 depth=6, Naïve Bayes Gaussian, 1D-CNN 32 filters + Dense, 2-layer LSTM 50 units) across 10-class multiclass and binary traffic targets.",
+    "Evaluated accuracy, precision, recall, F1-score, confusion matrix distributions, and computational execution runtime with vs. without PSO."
+  ],
+  "keyAssumptions": [
+    "A wrapper feature selection method leveraging Random Forest accuracy as a fitness function identifies feature subsets that generalize effectively across both tree-based ML and deep learning architectures.",
+    "Preserving the natural class imbalance of the RT_IoT2022 dataset accurately reflects real-world IoT operational environment threat distributions."
+  ],
+  "datasets": [
+    "RT_IoT2022 Dataset (123,117 instances across 4 normal IoT profiles [MQTT, ThingSpeak-LED, Wipro-Bulb, Amazon Alexa] and 9 attack patterns [ARP Poisoning, DDoS Slowloris, DoS SYN Hping, Metasploit SSH Brute Force, NMAP FIN/OS/TCP/UDP/XMAS Scans])"
+  ],
+  "partition": [],
+  "numClients": [],
+  "experimentalSetup": [
+    "Workstation setup: Intel Core i7-8650U CPU, 16 GB RAM, Intel UHD Graphics, Microsoft Windows 11 Pro.",
+    "Software stack: Jupyter Notebook, Python 3.8.10, TensorFlow 2.17.0, Scikit-Learn 1.5.1, Pandas 2.2.2, NumPy 1.26.4.",
+    "Model configurations: CatBoost (lr=0.1, depth=6, 1000 iter), CNN (32 filters 1D-conv + pool size 2, 10 epochs, batch 32), LSTM (2 layers of 50 units, 10 epochs, batch 32)."
+  ],
+  "baselines": [
+    "QAE-f16 Quantized Autoencoder (Sharmila & Nagapadma 2023, Accuracy: 97.25%, F1: 97.24% on RT_IoT2022)",
+    "Related work benchmarks on other IoT datasets: Popoola et al. 2021 (BoT-IoT), Kan et al. 2021 (N-BaIoT), Wu et al. 2024 (NSL-KDD FL GNN), Lo et al. 2022 (ToN-IoT GNN)"
+  ],
+  "flAlgorithms": [],
+  "xaiMethods": [],
+  "xaiEvaluation": "None (The study focuses on bio-inspired metaheuristic feature selection [PSO] and ML/DL classification performance rather than explicit post-hoc XAI interpretability techniques like SHAP or LIME).",
+  "metrics": [
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "F1-Score",
+    "Confusion Matrix",
+    "Training / Execution Time (seconds)"
+  ],
+  "results": "CatBoost combined with PSO achieved top performance across all metrics: 99.85% binary accuracy and 99.82% multi-class accuracy, outperforming KNN (99.62%/99.52%), 1D-CNN (99.56%/98.96%), LSTM (96.82%/97.82%), SVM (97.46%/96.17%), and Naïve Bayes (83.04%). CatBoost + PSO outperformed the baseline QAE-f16 model by +2.6% across all performance metrics.",
+  "failureConditions": [
+    "Naïve Bayes failed on features with strong conditional interdependencies (e.g., fwd_data_pkts_tot vs fwd_header_size_tot), resulting in accuracy dropping to 83.04% and misclassifying &gt;50% of ARP Poisoning, NMAP XMAS, and Normal traffic.",
+    "Severe minority attack classes with very few training samples (e.g., NMAP FIN Scan with only 28 instances or Metasploit SSH Brute Force with 37 instances) suffered from misclassifications in CNN and SVM models."
+  ],
+  "costEvaluation": "PSO feature selection dramatically reduced execution time across models—most notably reducing SVM binary classification runtime by 95.7% (from 342.23s down to 14.65s) and LSTM runtime by 55.6% (from 1555.2s down to 691.13s) with minimal accuracy impact.",
+  "limitations": [
+    {
+      "text": "The framework operates as a centralized processing pipeline and does not incorporate federated learning or distributed privacy-preserving edge architectures.",
+      "theme": "Absence of Federated Learning"
+    },
+    {
+      "text": "Classifiers struggled to reliably detect extreme minority attack classes with low sample counts (e.g., NMAP FIN Scan with only 28 instances).",
+      "theme": "Extreme Class Imbalance Vulnerability"
+    },
+    {
+      "text": "Lacks explicit Explainable AI (XAI) feature attributions (such as SHAP or LIME values) to explain internal decision boundaries to human security analysts.",
+      "theme": "Lack of XAI Interpretability"
+    }
+  ],
+  "futureWork": [
+    "Develop hybrid deep learning architectures to improve classification of low-frequency, rare attack types.",
+    "Explore advanced data sampling and synthetic generation techniques for extreme class imbalance.",
+    "Deploy and evaluate the PSO-enhanced IDS framework in real-time on physical IoT edge hardware."
+  ],
+  "relevance": "Provides moderate/supporting relevance to your thesis subject by evaluating ML/DL models on the modern RT_IoT2022 dataset, which includes Layer-2 adjacent attack traffic (7,750 ARP Poisoning samples) alongside multi-class IoT threat vectors.",
+  "newIdeas": [
+    "Extract the ARP Poisoning (Layer-2) subset from the RT_IoT2022 dataset and integrate PSO feature selection with a Federated Learning architecture and SHAP explainability."
+  ],
+  "reviewStatus": "Reviewed",
+  "priority": "Medium",
+  "evidence": [
+    {
+      "item": "Title, authors, DOI (10.1016/j.dsm.2025.02.005), and journal venue",
+      "page": "Page 1 (423)",
+      "section": "Header",
+      "ref": "Passages 1 & 6"
+    },
+    {
+      "item": "RT_IoT2022 dataset topology, device profiles, and attack pattern instances",
+      "page": "Pages 4–5 (426–427)",
+      "section": "Data acquisition",
+      "ref": "Figures 1, 2 & Tables 2, 3"
+    },
+    {
+      "item": "PSO wrapper feature selection algorithm and Random Forest fitness function",
+      "page": "Pages 5–6 (427–428)",
+      "section": "Feature selection",
+      "ref": "Figure 3 & Table 4"
+    },
+    {
+      "item": "Experimental setup and ML/DL model hyperparameters",
+      "page": "Pages 5, 7 (427, 429)",
+      "section": "Experimental setup & Model hyperparameters",
+      "ref": "Table 5 & Passage 33"
+    },
+    {
+      "item": "Binary & Multi-class evaluation results (CatBoost 99.85% / 99.82%)",
+      "page": "Pages 8–11 (430–433)",
+      "section": "Results and discussion",
+      "ref": "Tables 6, 8 & Figures 4–15"
+    },
+    {
+      "item": "Impact of PSO feature selection on model runtime (SVM speedup from 342.23s to 14.65s)",
+      "page": "Page 12 (434)",
+      "section": "Impact of PSO-based feature selection on model performance",
+      "ref": "Table 9"
+    },
+    {
+      "item": "Comparison against baseline QAE-f16 model (Sharmila & Nagapadma 2023)",
+      "page": "Page 12 (434)",
+      "section": "Comparison with previous work",
+      "ref": "Figure 16"
+    }
+  ]
+}
